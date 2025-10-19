@@ -41,5 +41,6 @@ def KSS(signal, fs):
         cdf_sample = np.zeros_like(array_tt)
         for i in range(len(array_tt)):
             cdf_sample[i] = scipy.stats.norm.cdf(array_tt[i],loc=mean_signal, scale=std_signal)
-        kss_results[f] = scipy.stats.kstest(Zxx[f],cdf_sample).pvalue
-        
+        test_stats = scipy.stats.kstest(Zxx[f],cdf_sample)
+        kss_results[f] = test_stats.pvalue
+    return kss_results
