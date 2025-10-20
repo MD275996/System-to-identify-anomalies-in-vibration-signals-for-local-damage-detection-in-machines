@@ -54,3 +54,23 @@ def AD(Zxx):
         test_result = scipy.stats.anderson(Zxx[f], dist='norm')
         ad_results[f] = test_result.statistic 
     return ad_results  
+
+def cvs(Zxx,q=0.2,p=1):
+    F = Zxx.shape[0]
+    T = Zxx.shape[1]
+
+    cvs_results = np.zeros(F)
+    for f in range(F):
+
+        sorted_signal = np.sort(Zxx[f])
+        lower_threshold = np.quantile(sorted_signal, q)
+        upper_threshold = np.quantile(sorted_signal, 1-q)
+        L = sorted_signal[sorted_signal <= lower_threshold]
+        R = sorted_signal[sorted_signal > upper_threshold]
+        M = sorted_signal[(lower_threshold < sorted_signal) & ( sorted_signal<= upper_threshold)]
+
+        N = 1/p * ((np.var(L)-np.var(M))/np.var(Zxx[0])+(np.var(R)-np.var(M))/np.var(Zxx[0])) * np.sqrt(len(Zxx[f]))
+
+        cvs_results[f] = N
+
+    return cvs_results
