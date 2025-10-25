@@ -15,7 +15,7 @@ def SK(Zxx):
         denum = np.sum(np.power(Zxx[f,:],2))
         sk_results[f] = (T*num/denum) - 2
 
-    return sk_results
+    return sk_results/max(sk_results)
 
 
 def JB(Zxx):
@@ -28,7 +28,7 @@ def JB(Zxx):
         k = scipy.stats.kurtosis(Zxx[f])
         jb_results[f] = T/6 * (s**2 + (np.power(k-1,2)/4))
     
-    return jb_results
+    return jb_results/max(jb_results)
 
 def KSS(Zxx):
     F = Zxx.shape[0]
@@ -43,7 +43,7 @@ def KSS(Zxx):
         test_stats = scipy.stats.kstest(Zxx[f],cdf_sample)
         kss_results[f] = 1/test_stats.statistic
     
-    return kss_results
+    return kss_results/max(kss_results)
 
 
 def AD(Zxx):    
@@ -52,16 +52,16 @@ def AD(Zxx):
     ad_results = np.zeros(F)
     for f in range(F):
         ad_results[f] = scipy.stats.anderson(Zxx[f], dist='norm').statistic
-    return ad_results  
+    return ad_results/max(ad_results)  
 
 def CVM(Zxx):
     F = Zxx.shape[0]
     T = Zxx.shape[1]
     results = np.zeros(F)
-    
+
     for f in range(F):
         results[f] = scipy.stats.cramervonmises(Zxx[f],cdf="norm").statistic
-    return results
+    return results/max(results)
 
 def CVS(Zxx,q=0.2,p=1):
     F = Zxx.shape[0]
@@ -81,4 +81,4 @@ def CVS(Zxx,q=0.2,p=1):
 
         cvs_results[f] = N
 
-    return cvs_results
+    return cvs_results/max(cvs_results)
