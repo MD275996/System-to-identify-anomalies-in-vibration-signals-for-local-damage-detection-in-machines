@@ -51,11 +51,19 @@ def AD(Zxx):
     T = Zxx.shape[1]
     ad_results = np.zeros(F)
     for f in range(F):
-        test_result = scipy.stats.anderson(Zxx[f], dist='norm')
-        ad_results[f] = test_result.statistic 
+        ad_results[f] = scipy.stats.anderson(Zxx[f], dist='norm').statistic
     return ad_results  
 
-def cvs(Zxx,q=0.2,p=1):
+def CVM(Zxx):
+    F = Zxx.shape[0]
+    T = Zxx.shape[1]
+    results = np.zeros(F)
+    
+    for f in range(F):
+        results[f] = scipy.stats.cramervonmises(Zxx[f],cdf="norm").statistic
+    return results
+
+def CVS(Zxx,q=0.2,p=1):
     F = Zxx.shape[0]
     T = Zxx.shape[1]
 
