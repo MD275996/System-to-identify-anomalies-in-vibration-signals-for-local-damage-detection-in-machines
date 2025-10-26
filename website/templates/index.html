@@ -1,13 +1,41 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Tutaj przyjdzie fajny tytuł</title>
+        <title>Local damage detection</title>
+        <style>
+        .container {
+          display: flex;          /* Ustawia flexbox – elementy wewnątrz układają się w poziomie */
+          justify-content: space-between; /* Opcjonalnie – odstęp między nimi */
+        }
+
+        .sidebar {
+        flex: 0 0 30%;             /* szerokość 30% */
+        background-color: lightgray;
+        padding: 20px;
+        }
+
+        .main {
+        flex: 0 0 70%;             /* szerokość 70% */
+        background-color: lightblue;
+        padding: 20px;
+        }
+        </style>
     </head>
     <body>
-        <h1>Tutaj przyjdzie header</h1>
-        <form action="/analyze", method = "post", enctype="multipart/form-data">
-            <input type="file", name="datafile", required>
-            <button type="submit">Wyślij i analizuj</button>
-        </form>
+        <div class="container">    
+            <div class="sidebar">
+                <h2>Menu</h2>
+                <p>Load data</p>
+                <p>Generate data</p>
+                <p>Info</p>
+            </div>
+            <div class="main">
+                <h1>Load data</h1>
+                <form action="/analyze", method = "post", enctype="multipart/form-data">
+                    <input type="file", name="datafile", required>
+                    <button type="submit">Wyślij i analizuj</button>
+                </form>
+            </div>
+        </div>
     </body>
 </html>
