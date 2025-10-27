@@ -1,0 +1,17 @@
+.container {
+    display: flex;          /* Ustawia flexbox – elementy wewnątrz układają się w poziomie */
+    height: 100vh;
+    justify-content: space-between; /* Opcjonalnie – odstęp między nimi */
+}
+
+.sidebar {
+flex: 3;
+border: 2px solid black;   
+padding: 20px;
+}
+
+.main {
+flex: 7; 
+border: 2px solid black;
+padding: 20px;
+}

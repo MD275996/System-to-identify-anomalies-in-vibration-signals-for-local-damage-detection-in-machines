@@ -2,32 +2,15 @@
 <html>
     <head>
         <title>Local damage detection</title>
-        <style>
-        .container {
-          display: flex;          /* Ustawia flexbox – elementy wewnątrz układają się w poziomie */
-          justify-content: space-between; /* Opcjonalnie – odstęp między nimi */
-        }
-
-        .sidebar {
-        flex: 0 0 30%;             /* szerokość 30% */
-        background-color: lightgray;
-        padding: 20px;
-        }
-
-        .main {
-        flex: 0 0 70%;             /* szerokość 70% */
-        background-color: lightblue;
-        padding: 20px;
-        }
-        </style>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
         <div class="container">    
             <div class="sidebar">
                 <h2>Menu</h2>
-                <p>Load data</p>
-                <p>Generate data</p>
-                <p>Info</p>
+                <a href="{{url_for('index')}}">Load data</a><br>  <!-- tutaj buttony muszą po prostu zamykać menu, jeśli klikniemy na stronę na której jesteśmy-->
+                <a href="{{url_for('generate')}}">Generate data</a><br>
+                <a href="{{url_for('info')}}">Info</a><br>
             </div>
             <div class="main">
                 <h1>Load data</h1>
