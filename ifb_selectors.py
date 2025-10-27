@@ -7,7 +7,6 @@ from scipy.stats import norm
 def SK(Zxx):
     F = Zxx.shape[0]
     T = Zxx.shape[1]
-    #wyrysować spektrogram
     sk_results = np.zeros(F)
 
     for f in range(F):

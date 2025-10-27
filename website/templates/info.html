@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Signal generator
+        </title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <div class="container">    
+            <div class="sidebar">
+                <h2>Menu</h2>
+                <a href="{{url_for('index')}}">Load data</a><br> 
+                <a href="{{url_for('generate')}}">Generate data</a><br>
+                <a href="{{url_for('info')}}">Info</a><br>
+            </div>
+            <div class="main">
+                <h1>Signal generated</h1>
+                <img src="{{ url_for('static', filename='generated.png') }}" alt="Wykres">
+            </div>
+        </div>
+    </body>
+
+</html>

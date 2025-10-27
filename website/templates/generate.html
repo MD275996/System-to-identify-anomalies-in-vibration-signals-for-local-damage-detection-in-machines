@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Impuls generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">    
+        <div class="sidebar">
+            <h2>Menu</h2>
+            <a href="{{url_for('index')}}">Load data</a><br>  <!-- tutaj buttony muszą po prostu zamykać menu, jeśli klikniemy na stronę na której jesteśmy-->
+            <a href="{{url_for('generate')}}">Generate data</a><br>
+            <a href="{{url_for('info')}}">Info</a><br>
+        </div>
+        <div class="main">
+            <h1>Generate data</h1>
+
+            <h1>Wypełnij formularz</h1>
+            <form method="POST">
+                <label>Amplituda impulsu:</label><br>
+                <input type="text" name="field1"><br><br>
+                
+                <label>Częstotliwość próbkowania:</label><br>
+                <input type="text" name="field2"><br><br>
+                
+                <label>Długość sygnału:</label><br>
+                <input type="text" name="field3"><br><br>
+                
+                <label>Częstotliwość powtarzania impulsów:</label><br>
+                <input type="text" name="field4"><br><br>
+                
+                <label>Środek pasma [Hz]:</label><br>
+                <input type="text" name="field5"><br><br>
+                
+                <label>Szerokość pasma [Hz]:</label><br>
+                <input type="text" name="field6"><br><br>
+                
+                <label>Przesunięcie impulsów:</label><br>
+                <input type="text" name="field7"><br><br>
+                
+                <input type="submit" value="Wyślij">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

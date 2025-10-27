@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy
+import impuls_simulator as impuls_simulator
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
@@ -15,8 +16,37 @@ os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok = True)
 def index():
     return render_template("index.html")
 
-@app.route("/generate")
+@app.route("/generate", methods=['GET', 'POST'])
 def generate():
+    if request.method == 'POST':
+        # Pobranie danych z formularza
+        try:
+            # Pobranie danych i konwersja na int
+            field1 = int(request.form.get('field1'))
+            field2 = int(request.form.get('field2'))
+            field3 = int(request.form.get('field3'))
+            field4 = int(request.form.get('field4'))
+            field5 = int(request.form.get('field5'))
+            field6 = int(request.form.get('field6'))
+            field7 = int(request.form.get('field7'))
+        except (TypeError, ValueError):
+            return "Błąd: wszystkie pola muszą być liczbami całkowitymi!", 400
+
+        # Przekazanie danych do funkcji
+        signal = impuls_simulator.gen_signal(field1, field2, field3, field4, field5, field6, field7)
+
+        plt.figure(figsize=(10, 4))
+        plt.plot(signal, color='blue', linewidth=1)
+        plt.title("Sygnał z impulsami i szumem")
+        plt.xlabel("Próbka")
+        plt.ylabel("Amplituda")
+        plt.grid(True)
+        plot_path = os.path.join("static", "generated.png")
+        os.makedirs("static", exist_ok=True)
+        plt.savefig(plot_path)
+        plt.close()
+
+        return render_template('info.html', result=signal)
     return render_template("generate.html")
 
 @app.route("/info")
