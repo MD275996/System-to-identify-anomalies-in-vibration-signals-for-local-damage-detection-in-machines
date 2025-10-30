@@ -5,13 +5,13 @@
 }
 
 .sidebar {
-flex: 3;
+flex: 1;
 border: 2px solid black;   
 padding: 20px;
 }
 
-.main {
-flex: 7; 
+#content {
+flex: 10; 
 border: 2px solid black;
 padding: 20px;
 }

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Local damage detection</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <script src="{{ url_for('static', filename='main.js') }}" defer></script>
+    </head>
+    <body>
+        <div class="container">    
+            <div class="sidebar">
+                <h2>Menu</h2>
+                <nav>
+                    <a data-page="analyze">Analyze data</a><br>
+                    <a data-page="load">Load data</a><br>
+                    <a data-page="generate">Generate data</a><br>
+                    <a data-page="info">Info</a><br>
+                </nav>
+            </div>
+            <div id="content">
+                {%include 'analyze.html'%}
+            </div>
+        </div>
+    </body>
+</html>

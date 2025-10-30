@@ -1,24 +1,2 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>
-            Wynik pozytywny
-        </title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    </head>
-    <body>
-        <div class="container">    
-            <div class="sidebar">
-                <h2>Menu</h2>
-                <a href="{{url_for('index')}}">Load data</a><br> 
-                <a href="{{url_for('generate')}}">Generate data</a><br>
-                <a href="{{url_for('info')}}">Info</a><br>
-            </div>
-            <div class="main">
-                <h1>Analiza zakończona</h1>
-                <img src="{{ url_for('static', filename='plot.png') }}" alt="Wykres">
-            </div>
-        </div>
-    </body>
-
-</html>
+<h1>Analiza zakończona</h1>
+<img src="{{ url_for('static', filename='plot.png') }}" alt="Wykres">
