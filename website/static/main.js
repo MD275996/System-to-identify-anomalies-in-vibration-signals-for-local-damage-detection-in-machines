@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const content = document.getElementById('content');
     const links = document.querySelectorAll('nav a');
 
@@ -8,8 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`/content/${page}`);
             const html = await response.text();
             content.innerHTML = html;
-
-            // Podłącz formularz jeśli jest w nowo załadowanej treści
             attachFormHandler();
         });
     });
@@ -33,6 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Upewnij się, że działa też po pierwszym załadowaniu
+    // Załaduj analyze przy starcie
+    const response = await fetch('/content/analyze');
+    const html = await response.text();
+    content.innerHTML = html;
     attachFormHandler();
 });

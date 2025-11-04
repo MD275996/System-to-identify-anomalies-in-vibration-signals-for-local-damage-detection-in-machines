@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy
 import impuls_simulator as impuls_simulator
+from livereload import Server
 
 app = Flask(__name__)
 DATA_FOLDER = "uploads"
@@ -103,5 +104,20 @@ def generate():
         return render_template('info.html', result=signal)
     return render_template("generate.html")
 
+# na potrzeby live reload wykomentuje to :)
+# if __name__ == "__main__":
+#     app.run(debug=True)
+
+
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    server = Server(app.wsgi_app)
+
+    # obserwuj folder z szablonami
+    server.watch("templates/*.html")
+    # obserwuj folder ze static
+    server.watch("static/*.*")
+
+    # uruchom serwer (port 5500 jak Live Server)
+    server.serve(port=5500, host="127.0.0.1", debug=True)
