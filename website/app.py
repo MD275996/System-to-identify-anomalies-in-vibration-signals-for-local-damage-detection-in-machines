@@ -14,12 +14,16 @@ os.makedirs(DATA_FOLDER, exist_ok = True)
 
 @app.route("/")         # dekorator, mówi Flaskowi pod jakim adresem URL ma być dostępna ta funkcja
 def home():
-    return render_template("home.html")
+    return render_template('home.html')
 
 @app.route('/content/<page>')
 def content(page):
     if page == 'analyze':
-        return render_template('analyze.html')
+        files = os.listdir(DATA_FOLDER) 
+        if files:      
+            return render_template('analyze.html', files=files)
+        else:
+            return render_template('analyze_empty.html')
     if page == 'load':
         return render_template('load.html')
     elif page == 'generate':
@@ -35,7 +39,7 @@ def load_file():
     uploaded_file = request.files["datafile"]
 
     if uploaded_file.filename == "":
-        return redirect(url_for("load"))
+        return redirect(url_for("content", page="load"))
     
     filepath = os.path.join(DATA_FOLDER, uploaded_file.filename)
     uploaded_file.save(filepath)
@@ -43,16 +47,9 @@ def load_file():
         
     return render_template("analyze.html")
 
-@app.route("/analyze")
-def analyze_content():
-    files = os.listdir(DATA_FOLDER)
-    print(files)
-    if files:
-        return render_template("analyze.html",files = files)
-    else :
-        return render_template("analyze_empty.html")
-# df = pd.read_csv(filepath, header=None)
-#     signal = np.array(df[0])
+# @app.route("/analyze") # tutaj nie będzie analyze, jednak to co się będzie działo po kliknięciu analyze z wybranym plikiem
+# def analyze_content():
+#     return 0
     
 #     fs = 25000
 #     array_freq, array_tt, matrix_Zxx = scipy.signal.stft(signal, fs = fs, window = 'hann')
