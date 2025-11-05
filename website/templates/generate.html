@@ -1,26 +1,26 @@
 <h1>Generate data</h1>
 <h1>Fill out the form</h1>
-<form method="POST">
+<form id="generateForm">
     <label>Amplituda impulsu:</label><br>
-    <input type="text" name="field1"><br><br>
+    <input type="text" name="field1" required><br><br>
     
     <label>Częstotliwość próbkowania:</label><br>
-    <input type="text" name="field2"><br><br>
+    <input type="text" name="field2" required><br><br>
     
     <label>Długość sygnału:</label><br>
-    <input type="text" name="field3"><br><br>
+    <input type="text" name="field3" required><br><br>
     
     <label>Częstotliwość powtarzania impulsów:</label><br>
-    <input type="text" name="field4"><br><br>
+    <input type="text" name="field4" required><br><br>
     
     <label>Środek pasma [Hz]:</label><br>
-    <input type="text" name="field5"><br><br>
+    <input type="text" name="field5" required><br><br>
     
     <label>Szerokość pasma [Hz]:</label><br>
-    <input type="text" name="field6"><br><br>
+    <input type="text" name="field6" required><br><br>
     
     <label>Przesunięcie impulsów:</label><br>
-    <input type="text" name="field7"><br><br>
+    <input type="text" name="field7" required><br><br>
     
-    <input type="submit" value="Wyślij">
+    <button type="submit">Generuj sygnał</button>
 </form>

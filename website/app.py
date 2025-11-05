@@ -46,7 +46,7 @@ def load_file():
     uploaded_file.save(filepath)
 
         
-    return render_template("analyze.html")
+    return redirect(url_for("content", page="analyze"))
 
 # @app.route("/analyze") # tutaj nie będzie analyze, jednak to co się będzie działo po kliknięciu analyze z wybranym plikiem
 # def analyze_content():
@@ -71,37 +71,40 @@ def load_file():
 
 #     return render_template("summary.html")
 
-@app.route("/generate", methods=['GET', 'POST'])
-def generate():
-    if request.method == 'POST':
-        # Pobranie danych z formularza
-        try:
-            # Pobranie danych i konwersja na int
-            field1 = int(request.form.get('field1'))
-            field2 = int(request.form.get('field2'))
-            field3 = int(request.form.get('field3'))
-            field4 = int(request.form.get('field4'))
-            field5 = int(request.form.get('field5'))
-            field6 = int(request.form.get('field6'))
-            field7 = int(request.form.get('field7'))
-        except (TypeError, ValueError):
-            return "Błąd: wszystkie pola muszą być liczbami całkowitymi!", 400
-
-        # Przekazanie danych do funkcji
+@app.route("/generate_data", methods=['POST'])
+def generate_data():
+    try:
+        field1 = int(request.form.get('field1'))
+        field2 = int(request.form.get('field2'))
+        field3 = int(request.form.get('field3'))
+        field4 = int(request.form.get('field4'))
+        field5 = int(request.form.get('field5'))
+        field6 = int(request.form.get('field6'))
+        field7 = int(request.form.get('field7'))
         signal = impuls_simulator.gen_signal(field1, field2, field3, field4, field5, field6, field7)
+        filepath = os.path.join(DATA_FOLDER, "generated_signal.csv")
+        np.savetxt(filepath, signal, delimiter=",")
+        
+        return "", 204 #sukcessss
+    except (TypeError, ValueError):
+        return "Błąd: wszystkie pola muszą być liczbami całkowitymi!", 400
+    except Exception as e:
+        return str(e), 500
 
-        plt.figure(figsize=(10, 4))
-        plt.plot(signal, color='blue', linewidth=1)
-        plt.title("Sygnał z impulsami i szumem")
-        plt.xlabel("Próbka")
-        plt.ylabel("Amplituda")
-        plt.grid(True)
-        plot_path = os.path.join("static", "generated.png")
-        os.makedirs("static", exist_ok=True)
-        plt.savefig(plot_path)
-        plt.close()
+        # plt.figure(figsize=(10, 4))
+        # plt.plot(signal, color='blue', linewidth=1)
+        # plt.title("Sygnał z impulsami i szumem")
+        # plt.xlabel("Próbka")
+        # plt.ylabel("Amplituda")
+        # plt.grid(True)
+        # plot_path = os.path.join("static", "generated.png")
+        # os.makedirs("static", exist_ok=True)
+        # plt.savefig(plot_path)
+        # plt.close()
 
-        return render_template('info.html', result=signal)
+        files = os.listdir(DATA_FOLDER)
+        print("redirect here")
+        return redirect(url_for("content", page="analyze"))
     return render_template("generate.html")
 
 # na potrzeby live reload wykomentuje to :)
