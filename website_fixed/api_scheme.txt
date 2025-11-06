@@ -1,7 +1,7 @@
 Funkcja             Endpoint            Metoda HTTP         Co dostaje?         Co zwraca?
---------------------------------------------------------------------------
-file_list           /api/files/         GET                 -                   Lista plików
-file_upload         /api/files/         POST                Plik (multipart)    Status przesłania
+----------------------------------------------------------------------------------------------------
+file_list           /api/files/list     GET                 -                   Lista plików
+file_upload         /api/files/upload   POST                Plik (multipart)    Status przesłania
 file_delete         /api/files/<id>     DELETE              ID pliku            Status usunięcia
 generate_signal     /api/generate       POST                Formularz           Status wygenerowania
 analize_file        /api/analyze/       POST                ID pliku            Wyniki analizy

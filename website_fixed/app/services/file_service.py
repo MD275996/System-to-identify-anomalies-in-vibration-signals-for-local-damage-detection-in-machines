@@ -8,3 +8,7 @@ def save_file(file):
     file_path = os.path.join(UPLOAD_FOLDER, filename)
     file.save(file_path)
     return filename
+
+def list_files():
+    files = os.listdir(UPLOAD_FOLDER)
+    return files

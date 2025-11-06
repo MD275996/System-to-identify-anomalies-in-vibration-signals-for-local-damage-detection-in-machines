@@ -14,3 +14,9 @@ def api_upload_file():
         return jsonify({"error": "No file provided"}), 400
     filename = save_file(file)
     return jsonify({"status":"ok","filename": filename})
+
+@files_api.get("/api/files/list")
+def api_list_files():
+    from app.services.file_service import list_files
+    files = list_files()
+    return jsonify({"files": files})
