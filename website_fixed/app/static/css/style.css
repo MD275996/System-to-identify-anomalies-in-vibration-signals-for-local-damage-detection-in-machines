@@ -76,6 +76,9 @@ html, body {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     background-color: #0056b3;
 }
+.selected {
+    border: 3px solid #ffc107;
+}
 
 h1, h2 {
     color: #333;
@@ -104,4 +107,29 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}
+
+.bottom-menu {
+    position: fixed;
+    bottom: 0;
+    left: 250px; /* bo sidebar ma 250px */
+    right: 0;
+    height: 120px;
+    background-color: var(--secondary-color);
+    border-top: 2px solid var(--border-color);
+    padding: 20px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s ease-in-out;
+    transform: translateY(100%); /* ukryte na dole */
+}
+
+.bottom-menu.visible {
+    transform: translateY(0); /* pojawia się */
+}
+
+.hidden {
+    display: none;
 }
