@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Generate data</h1>
+<h1>Fill out the form</h1>
+<form id="generateForm">
+    <label>Impuls amplitude:</label><br>
+    <input type="text" name="field1" required><br><br>
+    
+    <label>Sampling frequency:</label><br>
+    <input type="text" name="field2" required><br><br>
+    
+    <label>Signal length:</label><br>
+    <input type="text" name="field3" required><br><br>
+    
+    <label>Pulse repetition frequency:</label><br>
+    <input type="text" name="field4" required><br><br>
+    
+    <label>Band center [Hz]:</label><br>
+    <input type="text" name="field5" required><br><br>
+    
+    <label>Band width [Hz]:</label><br>
+    <input type="text" name="field6" required><br><br>
+    
+    <label>Shift:</label><br>
+    <input type="text" name="field7" required><br><br>
+    
+    <button type="submit">Generuj sygnał</button>
+</form>
+
+{% endblock %}

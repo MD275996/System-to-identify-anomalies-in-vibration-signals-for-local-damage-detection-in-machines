@@ -12,14 +12,14 @@ document.getElementById("upload-form").addEventListener("submit", async function
         const formData = new FormData();
         formData.append("file", file);
 
-        const response = await fetch("/api/files/upload", {
+        const response = await fetch("/api/load/upload", {
             method: "POST",
             body: formData
         });
 
         const data = await response.json();
 
-        if (data.status == "ok") {
+        if (data.success) {
             alert("File uploaded successfully: " + data.filename);
             // Po udanym uploadzie, przekieruj do strony z plikami
             window.location.href = "/files";
