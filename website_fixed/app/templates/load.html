@@ -1,6 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
 <form id="upload-form">
     <input type="file" id="file-input" accept="/csv"><br><br>
     <button type="submit">Upload file</button>
 </form>
 
 <script src="{{ url_for('static', filename='js/load.js')}}"></script>
+{% endblock %}
