@@ -1,7 +1,6 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
 from scipy.signal import firwin, lfilter
+import os
 
 def impsim(fs, nx, fmod, amp_imp, f_center, bandwidth, shift):
     """
@@ -86,8 +85,9 @@ def gen_signal(B=20, fs=25000, varsize=25000, fmod=30, f_center=5000, bandwidth=
     signal = noise + y
     return signal
 
-def save_to_file(signal):
+def save_to_file(signal,filename):
     # dostaje sygnał
     # sprawdza jakie pliki są już w folderze 
     # dodaje kolejny wygenerowany plik
-    np.savetxt("assets/signal.csv", signal)
+    UPLOAD_FOLDER = "app/uploads"
+    np.savetxt(os.path.join(UPLOAD_FOLDER, filename), signal)
