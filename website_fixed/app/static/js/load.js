@@ -1,28 +1,33 @@
 // podpinamu się pod formularz upload-form i pod event "submit"
 document.getElementById("upload-form").addEventListener("submit", async function(e) {
-    e.precentDefault(); // zatrzymuje domyślne zachowanie formularza
+    e.preventDefault(); // zatrzymuje domyślne zachowanie formularza
 
-    const file = document.getElementById("file-input").files[0];    //pobieramy plik z inputa
-    if (!file){ //sprawdzenie czy plik dodano
-        alert("Please select a file to upload.");
-        return;
-    }
+    try {
+        const file = document.getElementById("file-input").files[0];
+        if (!file) {
+            alert("Please select a file to upload.");
+            return;
+        }
 
-    const formData = new FormData();    //tworzymy FormData czyli specjalny obiekt w js który potrafi przenosić pliki i takie tam rzeczy 
-    formData.append("file", file);
+        const formData = new FormData();
+        formData.append("file", file);
 
-    // wysyłamy fetch do API, czyli post na adres api/files/upload i czekamy na odpowiedź
-    const res = await fetch("/api/files/upload", {
-        method: "POST",
-        body: formData
-    });
+        const response = await fetch("/api/files/upload", {
+            method: "POST",
+            body: formData
+        });
 
-    const data = await res.json();
+        const data = await response.json();
 
-    // potwierdzenie czy akcja się udała czy nie
-    if (data.status === "ok"){
-        alert("File uploaded successfully: " + data.filename);
-    }else{
-        alert("File upload failed: ");
+        if (data.status == "ok") {
+            alert("File uploaded successfully: " + data.filename);
+            // Po udanym uploadzie, przekieruj do strony z plikami
+            window.location.href = "/files";
+        } else {
+            alert("File upload failed: " + (data.error || "Unknown error"));
+        }
+    } catch (error) {
+        console.error("Upload error:", error);
+        alert("Error during file upload: " + error.message);
     }
 });
