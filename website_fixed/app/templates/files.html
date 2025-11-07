@@ -2,10 +2,10 @@
 {% block content %}
 
 <h2>Uploaded files</h2>
-<div class="file-grid"></div>
-
-
-<div id="bottom-menu" class="bottom-menu hidden"></div>
-
+<div class="file-container">
+    <div class="file-grid"></div>
+    <div id="bottom-menu" class="bottom-menu hidden"></div>
+</div>
+    
 <script src="{{ url_for('static', filename='js/files.js') }}"></script>
 {% endblock %}

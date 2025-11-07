@@ -13,9 +13,26 @@ html, body {
     font-family: Arial, sans-serif;
 }
 
+#content {
+    flex: 1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #fff;
+    overflow-y: auto;
+}
+
 .container {
     display: flex;
     height: 100%;
+}
+
+.file-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex:1;
 }
 
 .sidebar {
@@ -45,17 +62,11 @@ html, body {
     cursor: pointer;
 }
 
-#content {
-    flex: 1;
-    padding: 20px;
-    background-color: #fff;
-    overflow-y: auto;
-    height: 100%;
-}
-
 .file-grid {
+    flex:9;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-auto-rows: minmax(100px, 200px);
     gap: 15px;
     padding: 20px 0;
 }
@@ -110,11 +121,7 @@ button:hover {
 }
 
 .bottom-menu {
-    position: fixed;
-    bottom: 0;
-    left: 250px; /* bo sidebar ma 250px */
-    right: 0;
-    height: 120px;
+    flex:1;
     background-color: var(--secondary-color);
     border-top: 2px solid var(--border-color);
     padding: 20px;
