@@ -14,3 +14,10 @@ def save_file(file):
 def list_files():
     files = os.listdir(UPLOAD_FOLDER)
     return files
+
+def delete_file(filename):
+    file_path = os.path.join(UPLOAD_FOLDER, secure_filename(filename))
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        return True
+    return False

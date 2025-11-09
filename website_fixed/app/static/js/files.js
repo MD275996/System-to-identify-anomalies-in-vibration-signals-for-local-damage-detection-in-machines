@@ -39,8 +39,36 @@ function showBottomMenu(filename) {
         <p>Selected file: ${filename}</p>
         <button id="analyze-btn">Analyze</button>
         <button id="delete-btn">Delete</button>
-        <button id="close-btn">Close</button>
-    `;
+        <button id="close-btn">Close</button>`;
     bottomMenu.classList.remove("hidden");
     bottomMenu.classList.add("visible");
+
+    // Obsługa przycisku Delete
+    document.getElementById("delete-btn").addEventListener("click", async () => {
+        try {
+            const res = await fetch(`/api/files/delete/${filename}`, {
+                method: 'DELETE'
+            });
+            const response = await res.json();
+            if (response.success) {
+                // Odświeżenie listy plików
+                await loadFiles();
+                // Ukrycie menu dolnego
+                bottomMenu.classList.remove("visible");
+                bottomMenu.classList.add("hidden");
+            } else {
+                const errorData = await response.json();
+                alert(`Error deleting file: ${errorData.message || 'Unknown error'}`);
+            }
+        } catch (error) {
+            console.error("Error during file deletion:", error);
+            alert("Failed to delete file. Please try again.");
+        }
+    });
+
+    // Obsługa przycisku Close
+    document.getElementById("close-btn").addEventListener("click", () => {
+        bottomMenu.classList.remove("visible");
+        bottomMenu.classList.add("hidden");
+    });
 }

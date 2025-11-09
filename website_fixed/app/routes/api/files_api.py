@@ -40,3 +40,12 @@ def api_list_files():
     from app.services.file_service import list_files
     files = list_files()
     return jsonify({"files": files})
+
+@files_api.delete("/api/files/delete/<filename>")
+def api_delete_file(filename):
+    from app.services.file_service import delete_file
+    success = delete_file(filename)
+    if success:
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False, "error": "File not found"}), 404
