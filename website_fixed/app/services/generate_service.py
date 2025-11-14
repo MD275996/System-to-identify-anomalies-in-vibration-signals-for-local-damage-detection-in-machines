@@ -90,4 +90,4 @@ def save_to_file(signal,filename):
     # sprawdza jakie pliki są już w folderze 
     # dodaje kolejny wygenerowany plik
     UPLOAD_FOLDER = "app/uploads"
-    np.savetxt(os.path.join(UPLOAD_FOLDER, filename), signal)
+    np.savetxt(os.path.join(UPLOAD_FOLDER, filename), signal,)
