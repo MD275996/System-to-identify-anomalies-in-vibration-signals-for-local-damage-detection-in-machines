@@ -1,4 +1,4 @@
-/* ladne zmienne do ustawiania ladnych kolorkow */
+/* ====================== main ====================== */
 :root {
     --primary-color: #007bff;
     --secondary-color: #e9ecef;
@@ -28,13 +28,6 @@ html, body {
     height: 100%;
 }
 
-.file-container {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    flex:1;
-}
-
 .sidebar {
     width: 250px;
     min-width: 250px;
@@ -60,6 +53,14 @@ html, body {
 .sidebar a:hover {
     background-color: var(--secondary-color);
     cursor: pointer;
+}
+
+/* ====================== files ====================== */
+.file-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex:1;
 }
 
 .file-grid {
@@ -89,6 +90,27 @@ html, body {
 }
 .selected {
     border: 4px solid #000000;
+}
+
+.bottom-menu {
+    flex:1;
+    background-color: var(--secondary-color);
+    border: 2px solid var(--border-color);
+    padding: 20px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s ease-in-out;
+    transform: translateY(100%); /* ukryte na dole */
+}
+
+.bottom-menu.visible {
+    transform: translateY(0); /* pojawia się */
+}
+
+.hidden {
+    display: none;
 }
 
 .modal{
@@ -127,6 +149,8 @@ h1, h2 {
     margin-bottom: 1rem;
 }
 
+/* ====================== generate ====================== */
+
 form {
     max-width: 500px;
     margin: 20px 0;
@@ -151,23 +175,77 @@ button:hover {
     background-color: #0056b3;
 }
 
-.bottom-menu {
-    flex:1;
-    background-color: var(--secondary-color);
-    border: 2px solid var(--border-color);
+.form-container {
+    max-width: 1000px;             /* szerokość formularza */
+    margin: 20px auto;
     padding: 20px;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    background: #fafafa;
+    font-size: 1.1rem;            /* lekko większa czcionka */
+}
+
+/* etykiety */
+.form-container label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* pola input */
+.form-container input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+/* efekt po fokusie */
+.form-container input[type="text"]:focus {
+    border-color: #4a90e2;
+    background: #fff;
+    outline: none;
+}
+
+/* kolumny */
+.columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* dwie kolumny */
+    gap: 20px;                      /* przerwa między kolumnami */
+    margin-top: 20px;
+}
+
+/* kolumny z polami */
+.column {
     display: flex;
-    align-items: center;
-    gap: 20px;
-    transition: transform 0.3s ease-in-out;
-    transform: translateY(100%); /* ukryte na dole */
+    flex-direction: column;
+    gap: 15px;                      /* równe odstępy między polami */
 }
 
-.bottom-menu.visible {
-    transform: translateY(0); /* pojawia się */
+/* przycisk */
+.form-container button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
 }
 
-.hidden {
-    display: none;
+.form-container button:hover {
+    background: #357acb;
+}
+
+/* responsywność – na małych ekranach kolumny zamienią się w jedną */
+@media (max-width: 600px) {
+    .columns {
+        grid-template-columns: 1fr;
+    }
 }
