@@ -18,7 +18,7 @@ def impsim(fs, nx, fmod, amp_imp, f_center, bandwidth):
     f_center = np.atleast_1d(f_center)
     bandwidth = np.atleast_1d(bandwidth)
 
-    shift = 0 #zamienić jeśli będziemy chcieli zaimplementować shift
+    shift = [0] #zamienić jeśli będziemy chcieli zaimplementować shift
     # shift = np.atleast_1d(shift)
     
     # funkcja pomocnicza impulsu tłumionego 
@@ -63,7 +63,7 @@ def impsim(fs, nx, fmod, amp_imp, f_center, bandwidth):
 
     return yy
 
-def gen_signal(B=20, fs=25000, varsize=25000, fmod=30, f_center=5000, bandwidth=1500, shift=0, sigma = 1):
+def gen_signal(B=20, fs=25000, varsize=25000, fmod=30, f_center=5000, bandwidth=1500, sigma = 1):
     """Parametry sygnału
     B:int - amplituda impulsów
     fs:int - częstotliwość próbkowania [Hz]
@@ -77,7 +77,7 @@ def gen_signal(B=20, fs=25000, varsize=25000, fmod=30, f_center=5000, bandwidth=
     """
 
     # Generowanie sygnału impulsowego
-    y = B * impsim(fs, varsize, fmod, 1, f_center, bandwidth, shift)
+    y = B * impsim(fs, varsize, fmod, 1, f_center, bandwidth)
 
     # Dodawanie szumu Gaussa
     sigma = 1
