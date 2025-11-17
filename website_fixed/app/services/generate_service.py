@@ -2,7 +2,7 @@ import numpy as np
 from scipy.signal import firwin, lfilter
 import os
 
-def impsim(fs, nx, fmod, amp_imp, f_center, bandwidth, shift):
+def impsim(fs, nx, fmod, amp_imp, f_center, bandwidth):
     """
         fs - częstotliwość próbkowania
         nx - liczba próbek w sygnale wynikowym
@@ -17,7 +17,9 @@ def impsim(fs, nx, fmod, amp_imp, f_center, bandwidth, shift):
     amp_imp = np.atleast_1d(amp_imp)
     f_center = np.atleast_1d(f_center)
     bandwidth = np.atleast_1d(bandwidth)
-    shift = np.atleast_1d(shift)
+
+    shift = 0 #zamienić jeśli będziemy chcieli zaimplementować shift
+    # shift = np.atleast_1d(shift)
     
     # funkcja pomocnicza impulsu tłumionego 
     def fnx(x, fn, dn):

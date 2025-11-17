@@ -18,11 +18,11 @@ def api_generate_data():
         field5 = int(request.form.get('field5'))
         field6 = int(request.form.get('field6'))
         field7 = int(request.form.get('field7'))
-        field8 = int(request.form.get('field8'))
+        #field8 = int(request.form.get('field8'))
 
         # Generowanie sygnału
         try:
-            signal = gen_signal(field2, field3, field4, field5, field6, field7, field8)
+            signal = gen_signal(field2, field3, field4, field5, field6, field7)
         except Exception as e:
             return jsonify({
                 "success": False,
