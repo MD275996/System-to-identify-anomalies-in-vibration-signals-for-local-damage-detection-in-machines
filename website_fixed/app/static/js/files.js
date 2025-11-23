@@ -96,6 +96,11 @@ function showBottomMenu(filename) {
         }
     });
 
+    //obsługa przycisku Analyze
+    document.getElementById("analyze-btn").addEventListener("click", () => {
+        window.location.href = `/analyze`;
+    });
+
     // Obsługa przycisku Close
     document.getElementById("close-btn").addEventListener("click", () => {
         bottomMenu.classList.remove("visible");
