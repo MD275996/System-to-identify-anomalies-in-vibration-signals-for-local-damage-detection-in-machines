@@ -49,3 +49,13 @@ def api_delete_file(filename):
         return jsonify({"success": True})
     else:
         return jsonify({"success": False, "error": "File not found"}), 404
+    
+@files_api.get("/api/files/plot/<filename>")
+def api_plot_file(filename):
+    from app.services.file_service import generate_plot
+    url = generate_plot(filename)
+    if url:
+        print("1")
+        return jsonify({"success": True, "url": url})
+    else:
+        return jsonify({"success": False}), 400

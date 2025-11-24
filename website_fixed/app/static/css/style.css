@@ -1,8 +1,13 @@
-/* ladne zmienne do ustawiania ladnych kolorkow */
+/* ====================== main ====================== */
 :root {
     --primary-color: #007bff;
     --secondary-color: #e9ecef;
     --border-color: #ddd;
+    --accent:#2b7cff;
+    --muted:#f3f4f6;
+    --danger:#e53e3e;
+    --radius:8px;
+    --gap:12px;
 }
 
 html, body {
@@ -18,7 +23,7 @@ html, body {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    margin: 20px;
     background-color: #fff;
     overflow-y: auto;
 }
@@ -26,13 +31,6 @@ html, body {
 .container {
     display: flex;
     height: 100%;
-}
-
-.file-container {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    flex:1;
 }
 
 .sidebar {
@@ -60,6 +58,14 @@ html, body {
 .sidebar a:hover {
     background-color: var(--secondary-color);
     cursor: pointer;
+}
+
+/* ====================== files ====================== */
+.file-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex:1;
 }
 
 .file-grid {
@@ -91,10 +97,116 @@ html, body {
     border: 4px solid #000000;
 }
 
+.bottom-menu {
+    flex:1;
+    background-color: var(--secondary-color);
+    border: 2px solid var(--border-color);
+    padding: 20px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s ease-in-out;
+    transform: translateY(100%); /* ukryte na dole */
+}
+
+.bottom-menu.visible {
+    transform: translateY(0); /* pojawia się */
+}
+
+.hidden {
+    display: none;
+}
+
+.modal{
+    position:fixed;
+    inset:0;
+    background: rgba(0,0,0,0.5);
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal.hidden{
+    display:none
+}
+
+.modal-content{
+background: white;
+padding: 20px;
+border-radius: 12px;
+max-width: 80%;
+max-height: 80%;
+display:flex;
+flex-direction: column;
+align-items: center;
+}
+
+.modal-content img{
+    max-width: 100%;
+    max-height: 80%;
+    border-radius: 8px;
+}
+
 h1, h2 {
     color: #333;
     margin-bottom: 1rem;
 }
+/* ====================== load ====================== */
+
+    .upload-container{
+    max-width:520px;
+    margin:20px auto;
+    }
+
+    .dropzone{
+    border:2px dashed var(--muted);
+    border-radius:var(--radius);
+    padding:28px;
+    text-align:center;
+    cursor:pointer;
+    transition:background .15s, border-color .15s;
+    background:#fff;
+    }
+
+    .dropzone.dragover{
+    background: #f0f6ff;
+    border-color:var(--accent);
+    box-shadow: 0 4px 14px rgba(43,124,255,0.08);
+    }
+
+    .drop-text{
+    margin:0;
+    color:#444;
+    font-size:16px;
+    }
+
+    .browse{
+    color:var(--accent);
+    font-weight:600;
+    text-decoration:underline;
+    cursor:pointer;
+    }
+
+    .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+
+    .controls{display:flex;gap:var(--gap);align-items:center;margin-top:12px;flex-wrap:wrap;}
+
+    .btn{
+    padding:8px 14px;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer;
+    }
+    .btn.primary{
+    background:var(--accent);color:#fff;border-color:transparent;
+    }
+
+    .progress{width:100%;background:#f3f4f6;border-radius:6px;height:10px;overflow:hidden;}
+    .progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),#6aa8ff);width:0%;transition:width .3s;}
+
+    .file-name{margin:8px 0 0;color:#333;font-size:14px;}
+    .error{color:var(--danger);font-size:13px;margin:0;}
+
+/* ====================== generate ====================== */
 
 form {
     max-width: 500px;
@@ -120,23 +232,77 @@ button:hover {
     background-color: #0056b3;
 }
 
-.bottom-menu {
-    flex:1;
-    background-color: var(--secondary-color);
-    border-top: 2px solid var(--border-color);
+.form-container {
+    max-width: 1000px;             /* szerokość formularza */
+    margin: 20px auto;
     padding: 20px;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    background: #fafafa;
+    font-size: 1.1rem;            /* lekko większa czcionka */
+}
+
+/* etykiety */
+.form-container label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* pola input */
+.form-container input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+/* efekt po fokusie */
+.form-container input[type="text"]:focus {
+    border-color: #4a90e2;
+    background: #fff;
+    outline: none;
+}
+
+/* kolumny */
+.columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* dwie kolumny */
+    gap: 20px;                      /* przerwa między kolumnami */
+    margin-top: 20px;
+}
+
+/* kolumny z polami */
+.column {
     display: flex;
-    align-items: center;
-    gap: 20px;
-    transition: transform 0.3s ease-in-out;
-    transform: translateY(100%); /* ukryte na dole */
+    flex-direction: column;
+    gap: 15px;                      /* równe odstępy między polami */
 }
 
-.bottom-menu.visible {
-    transform: translateY(0); /* pojawia się */
+/* przycisk */
+.form-container button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
 }
 
-.hidden {
-    display: none;
+.form-container button:hover {
+    background: #357acb;
+}
+
+/* responsywność – na małych ekranach kolumny zamienią się w jedną */
+@media (max-width: 600px) {
+    .columns {
+        grid-template-columns: 1fr;
+    }
 }

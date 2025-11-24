@@ -8,6 +8,7 @@ def create_app():
     from app.routes.api.load_api import load_api
     from app.routes.api.generate_api import generate_api
     from app.routes.files import files_page
+    from app.routes.analyze import analyze_page
     from app.routes.base import base_page
     from app.routes.load import load_page
     from app.routes.generate import generate_page  
@@ -17,6 +18,7 @@ def create_app():
     app.register_blueprint(load_api)
     app.register_blueprint(generate_api)
     app.register_blueprint(files_page)
+    app.register_blueprint(analyze_page)
     app.register_blueprint(base_page)
     app.register_blueprint(load_page)
     app.register_blueprint(generate_page)

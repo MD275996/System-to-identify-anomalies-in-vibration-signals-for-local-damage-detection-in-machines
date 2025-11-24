@@ -2,7 +2,7 @@ import numpy as np
 from scipy.signal import firwin, lfilter
 import os
 
-def impsim(fs, nx, fmod, amp_imp, f_center, bandwidth, shift):
+def impsim(fs, nx, fmod, amp_imp, f_center, bandwidth):
     """
         fs - częstotliwość próbkowania
         nx - liczba próbek w sygnale wynikowym
@@ -17,7 +17,9 @@ def impsim(fs, nx, fmod, amp_imp, f_center, bandwidth, shift):
     amp_imp = np.atleast_1d(amp_imp)
     f_center = np.atleast_1d(f_center)
     bandwidth = np.atleast_1d(bandwidth)
-    shift = np.atleast_1d(shift)
+
+    shift = [0] #zamienić jeśli będziemy chcieli zaimplementować shift
+    # shift = np.atleast_1d(shift)
     
     # funkcja pomocnicza impulsu tłumionego 
     def fnx(x, fn, dn):
@@ -61,7 +63,7 @@ def impsim(fs, nx, fmod, amp_imp, f_center, bandwidth, shift):
 
     return yy
 
-def gen_signal(B=20, fs=25000, varsize=25000, fmod=30, f_center=5000, bandwidth=1500, shift=0, sigma = 1):
+def gen_signal(B=20, fs=25000, varsize=25000, fmod=30, f_center=5000, bandwidth=1500, sigma = 1):
     """Parametry sygnału
     B:int - amplituda impulsów
     fs:int - częstotliwość próbkowania [Hz]
@@ -75,7 +77,7 @@ def gen_signal(B=20, fs=25000, varsize=25000, fmod=30, f_center=5000, bandwidth=
     """
 
     # Generowanie sygnału impulsowego
-    y = B * impsim(fs, varsize, fmod, 1, f_center, bandwidth, shift)
+    y = B * impsim(fs, varsize, fmod, 1, f_center, bandwidth)
 
     # Dodawanie szumu Gaussa
     sigma = 1
@@ -90,4 +92,4 @@ def save_to_file(signal,filename):
     # sprawdza jakie pliki są już w folderze 
     # dodaje kolejny wygenerowany plik
     UPLOAD_FOLDER = "app/uploads"
-    np.savetxt(os.path.join(UPLOAD_FOLDER, filename), signal)
+    np.savetxt(os.path.join(UPLOAD_FOLDER, filename), signal,)
