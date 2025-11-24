@@ -97,8 +97,20 @@ function showBottomMenu(filename) {
     });
 
     //obsługa przycisku Analyze
-    document.getElementById("analyze-btn").addEventListener("click", () => {
-        window.location.href = `/analyze`;
+    document.getElementById("analyze-btn").addEventListener("click", async () => {
+        const res = await fetch(`/api/analyze/${filename}`, {
+            method: "POST"
+        });
+        const data = await res.json();
+
+        console.log("Sending analysis request for:", filename);
+        console.log("Response:", data); 
+
+        if (data.success) {
+            window.location.href = "/analyze";
+        } else {
+            alert("Analysis failed");
+        }
     });
 
     // Obsługa przycisku Close
@@ -106,7 +118,5 @@ function showBottomMenu(filename) {
         bottomMenu.classList.remove("visible");
         bottomMenu.classList.add("hidden");
         document.querySelectorAll(".file-grid-element.selected").forEach(el => el.classList.remove("selected"));
-        showBottomMenu(file);
-        fileDiv.classList.add("selected");
     });
 }
