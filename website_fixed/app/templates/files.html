@@ -1,18 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="file-container">
-    <h1>Uploaded files</h1>
-    <div class="file-grid"></div>
-    <div id="plot-modal", class = "modal hidden">
-        <div class="modal-content">
-            <span id="plot-close" class="close">&times;</span>
-            <img id="plot-image" src="" alt="Plot preview">
+<h1>Uploaded files</h1>
+<div class = "main-container">
+
+    <div class="left-panel">            <!--   prawa kolumna -->
+        <div class="file-grid"></div>
+        <div id="plot-modal", class = "modal hidden">
+            <div class="modal-content">
+                <span id="plot-close" class="close">&times;</span>
+                <img id="plot-image" src="" alt="Plot preview">
+            </div>
         </div>
+        <div id="bottom-menu" class="bottom-menu hidden"></div>
     </div>
-    <div id="bottom-menu" class="bottom-menu hidden"></div>
-    <div class="analyze">
-        
+    <div class="right-panel">               <!--   prawa kolumna -->
+        <h2>Analysis panel</h2>
+        <div id="analyze-results" class="analyze">
+
+        </div>
     </div>
 </div>
     

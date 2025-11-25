@@ -7,6 +7,7 @@ import pandas as pd
 import app.services.ifb_selectors as selector
 
 PLOT_FOLDER = "app/static/tmp"
+READ_PATH = "static/tmp"
 
 def process_file(filename):
     # STFT
@@ -33,7 +34,6 @@ def process_file(filename):
     output_path = os.path.join(PLOT_FOLDER, output_name)
     plt.savefig(output_path)
     plt.close
-
     output_paths.append(f"/static/tmp/temp_spec.png")
 
     sk_results = selector.SK(Zxx)
@@ -43,49 +43,79 @@ def process_file(filename):
     cvm_results = 1-selector.CVM(Zxx)
     cvs_results = selector.CVS(Zxx)
 
-    fig, axes = plt.subplots(3,2,figsize=(18,20))
-    axes[0,0].plot(array_freq,sk_results,'bo-')
-    axes[0,0].set_title("Spectral Kurtosis")
-    axes[0,0].set_xlabel("Częstotliwość")
-    axes[0,0].set_ylabel("Wartość selektora")
-
-    axes[0,1].plot(array_freq,jb_results,'ro-')
-    axes[0,1].set_title("Jarque-Bera")
-    axes[0,1].set_xlabel("Częstotliwość")
-    axes[0,1].set_ylabel("Wartość selektora")
-
-    axes[1,0].plot(array_freq, kss_results,'go-')
-    axes[1,0].set_title("Kolmogorov-Smirnov")
-    axes[1,0].set_xlabel("Częstotliwość")
-    axes[1,0].set_ylabel("Wartość selektora")
-
-    axes[1,1].plot(array_freq, ad_results,'co-')
-    axes[1,1].set_title("Anderson Darling")
-    axes[1,1].set_xlabel("Częstotliwość")
-    axes[1,1].set_ylabel("Wartość selektora")
-
-    axes[2,0].plot(array_freq, cvm_results,'mo-')
-    axes[2,0].set_title("Cramer-von Mises")
-    axes[2,0].set_xlabel("Częstotliwość")
-    axes[2,0].set_ylabel("Wartość selektora")
-
-    axes[2,1].plot(array_freq, cvs_results,'ko-')
-    axes[2,1].set_title("Conditional Variance")
-    axes[2,1].set_xlabel("Częstotliwość")
-    axes[2,1].set_ylabel("Wartość selektora")
-
-    axes[0,0].grid()
-    axes[0,1].grid()
-    axes[1,0].grid()
-    axes[1,1].grid()
-    axes[2,0].grid()
-    axes[2,1].grid()
-
-    plt.tight_layout()
-    output_name = "temp_selectors.png"
+    plt.figure(figsize=(18, 6))
+    plt.plot(array_freq,sk_results,'bo-')
+    plt.title("Spectral Kurtosis")
+    plt.xlabel("Częstotliwość")
+    plt.ylabel("Wartość selektora")
+    plt.grid()
+    output_name = "temp_sk.png"
     output_path = os.path.join(PLOT_FOLDER, output_name)
+    print(output_path)
+    output_paths.append(output_path[3:])
     plt.savefig(output_path)
     plt.close
-    output_paths.append(f"/static/tmp/temp_selectors.png")
+
+    plt.figure(figsize=(18, 6))
+    plt.plot(array_freq,jb_results,'ro-')
+    plt.title("Jarque-Bera")
+    plt.xlabel("Częstotliwość")
+    plt.ylabel("Wartość selektora")
+    plt.grid()
+    output_name = "temp_jb.png"
+    output_path = os.path.join(PLOT_FOLDER, output_name)
+    output_paths.append(output_path[3:])
+    plt.savefig(output_path)
+    plt.close
+
+    plt.figure(figsize=(18, 6))
+    plt.plot(array_freq, kss_results,'go-')
+    plt.title("Kolmogorov-Smirnov")
+    plt.xlabel("Częstotliwość")
+    plt.ylabel("Wartość selektora")
+    plt.grid()
+    output_name = "temp_kss.png"
+    output_path = os.path.join(PLOT_FOLDER, output_name)
+    output_paths.append(output_path[3:])
+    plt.savefig(output_path)
+    plt.close
+
+    plt.figure(figsize=(18, 6))
+    plt.plot(array_freq, ad_results,'co-')
+    plt.title("Anderson Darling")
+    plt.xlabel("Częstotliwość")
+    plt.ylabel("Wartość selektora")
+    plt.grid()
+    output_name = "temp_ad.png"
+    output_path = os.path.join(PLOT_FOLDER, output_name)
+    output_paths.append(output_path[3:])
+    plt.savefig(output_path)
+    plt.close
+
+    plt.figure(figsize=(18, 6))
+    plt.plot(array_freq, cvm_results,'mo-')
+    plt.title("Cramer-von Mises")
+    plt.xlabel("Częstotliwość")
+    plt.ylabel("Wartość selektora")
+    plt.grid()
+    output_name = "temp_cvm.png"
+    output_path = os.path.join(PLOT_FOLDER, output_name)
+    output_paths.append(output_path[3:])
+    plt.savefig(output_path)
+    plt.close
+
+    plt.figure(figsize=(18, 6))
+    plt.plot(array_freq, cvs_results,'ko-')
+    plt.title("Conditional Variance")
+    plt.xlabel("Częstotliwość")
+    plt.ylabel("Wartość selektora")
+    plt.grid()
+    output_name = "temp_cvs.png"
+    output_path = os.path.join(PLOT_FOLDER, output_name)
+    output_paths.append(output_path[3:])
+    plt.savefig(output_path)
+    plt.close
+
+
 
     return output_paths

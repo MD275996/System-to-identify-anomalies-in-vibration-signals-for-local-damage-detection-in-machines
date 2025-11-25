@@ -103,11 +103,25 @@ function showBottomMenu(filename) {
         });
         const data = await res.json();
 
-        console.log("Sending analysis request for:", filename);
-        console.log("Response:", data); 
-
         if (data.success) {
-            window.location.href = "/analyze";
+            // to było w pliku dla analyze
+            const res = await fetch("/api/analyze/result");
+            const data = await res.json();
+
+            if (!data.success){
+                document.getElementById("analyze-results").innerHTML = "<p> No data.</p>"
+                return;
+            }
+            const container = document.getElementById("analyze-results");
+
+            data.plots.forEach(path => {
+                const img = document.createElement("img")
+                img.src = path;
+                img.style.width = "400px";
+                img.style.margin = "10px";
+                container.appendChild(img);        
+            });
+        
         } else {
             alert("Analysis failed");
         }
