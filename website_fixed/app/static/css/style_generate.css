@@ -1,0 +1,99 @@
+
+form {
+    max-width: 500px;
+    margin: 20px 0;
+}
+
+input, button {
+    padding: 8px 12px;
+    margin: 5px 0;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.form-container {
+    max-width: 1000px;             /* szerokość formularza */
+    margin: 20px auto;
+    padding: 20px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    background: #fafafa;
+    font-size: 1.1rem;            /* lekko większa czcionka */
+}
+
+/* etykiety */
+.form-container label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* pola input */
+.form-container input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+/* efekt po fokusie */
+.form-container input[type="text"]:focus {
+    border-color: #4a90e2;
+    background: #fff;
+    outline: none;
+}
+
+/* kolumny */
+.columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* dwie kolumny */
+    gap: 20px;                      /* przerwa między kolumnami */
+    margin-top: 20px;
+}
+
+/* kolumny z polami */
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;                      /* równe odstępy między polami */
+}
+
+/* przycisk */
+.form-container button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.form-container button:hover {
+    background: #357acb;
+}
+
+/* responsywność – na małych ekranach kolumny zamienią się w jedną */
+@media (max-width: 600px) {
+    .columns {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,61 @@
+/* ====================== main ====================== */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #e9ecef;
+    --border-color: #ddd;
+    --accent:#2b7cff;
+    --muted:#f3f4f6;
+    --danger:#e53e3e;
+    --radius:8px;
+    --gap:12px;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+#content {
+    flex: 1;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    background-color: #fff;
+    overflow-y: auto;
+}
+
+.container {
+    display: flex;
+    height: 100%;
+}
+
+.sidebar {
+    width: 250px;
+    min-width: 250px;
+    background-color: #f8f9fa;
+    border-right: 1px solid var(--border-color);
+    padding: 20px;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: var(--secondary-color);
+    cursor: pointer;
+}

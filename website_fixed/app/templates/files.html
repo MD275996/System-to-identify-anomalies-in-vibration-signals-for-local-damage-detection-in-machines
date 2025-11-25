@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Uploaded files</h1>
 <div class="file-container">
+    <h1>Uploaded files</h1>
     <div class="file-grid"></div>
     <div id="plot-modal", class = "modal hidden">
         <div class="modal-content">
@@ -11,7 +11,11 @@
         </div>
     </div>
     <div id="bottom-menu" class="bottom-menu hidden"></div>
+    <div class="analyze">
+        
+    </div>
 </div>
     
 <script src="{{ url_for('static', filename='js/files.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_files.css') }}">
 {% endblock %}
