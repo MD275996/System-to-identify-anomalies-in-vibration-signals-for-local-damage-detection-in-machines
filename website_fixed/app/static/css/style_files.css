@@ -16,6 +16,8 @@
 .right-panel {
     flex:1;
     padding:20px;
+    display: flex;
+    flex-direction: column;
     background: #fafafa;
     border-left: 2px solid var(--border-color);
     overflow-y: auto;
@@ -30,6 +32,10 @@
     height: 100%;
     border: 2px dasched #ccc;
     border-radius: 10px;
+}
+
+.analyze img{
+    width: 100%;
 }
 
 .file-grid {

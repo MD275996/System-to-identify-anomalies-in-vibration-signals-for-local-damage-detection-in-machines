@@ -112,14 +112,10 @@ function showBottomMenu(filename) {
                 document.getElementById("analyze-results").innerHTML = "<p> No data.</p>"
                 return;
             }
-            const container = document.getElementById("analyze-results");
-
-            data.plots.forEach(path => {
-                const img = document.createElement("img")
-                img.src = path;
-                img.style.width = "400px";
-                img.style.margin = "10px";
-                container.appendChild(img);        
+            // poniższe trzeba zamienić
+            data.plots.forEach((path, i) => {
+                const img = document.getElementById(`plot${i+1}`);
+                if (img) img.src = path;      
             });
         
         } else {
