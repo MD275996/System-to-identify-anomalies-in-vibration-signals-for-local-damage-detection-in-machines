@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import pandas as pd
-import ifb_selectors as selector
+import app.services.ifb_selectors as selector
 
 PLOT_FOLDER = "app/static/tmp"
 
@@ -34,7 +34,7 @@ def process_file(filename):
     plt.savefig(output_path)
     plt.close
 
-    output_paths.append(f"/app/static/tmp/temp_spec.png")
+    output_paths.append(f"/static/tmp/temp_spec.png")
 
     sk_results = selector.SK(Zxx)
     jb_results = selector.JB(Zxx)
@@ -86,6 +86,6 @@ def process_file(filename):
     output_path = os.path.join(PLOT_FOLDER, output_name)
     plt.savefig(output_path)
     plt.close
-    output_paths.append(f"/app/static/tmp/temp_selectors.png")
+    output_paths.append(f"/static/tmp/temp_selectors.png")
 
     return output_paths

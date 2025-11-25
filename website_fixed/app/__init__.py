@@ -5,6 +5,7 @@ def create_app():
 
     #import blueprintów
     from app.routes.api.files_api import files_api
+    from app.routes.api.analyze_api import analyze_api
     from app.routes.api.load_api import load_api
     from app.routes.api.generate_api import generate_api
     from app.routes.files import files_page
@@ -15,6 +16,7 @@ def create_app():
 
     #rejestracja blueprintów
     app.register_blueprint(files_api)
+    app.register_blueprint(analyze_api)
     app.register_blueprint(load_api)
     app.register_blueprint(generate_api)
     app.register_blueprint(files_page)
