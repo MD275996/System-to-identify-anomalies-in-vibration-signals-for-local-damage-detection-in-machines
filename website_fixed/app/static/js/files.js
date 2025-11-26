@@ -104,7 +104,6 @@ function showBottomMenu(filename) {
         const data = await res.json();
 
         if (data.success) {
-            // to było w pliku dla analyze
             const res = await fetch("/api/analyze/result");
             const data = await res.json();
 
@@ -114,8 +113,7 @@ function showBottomMenu(filename) {
             }
             // poniższe trzeba zamienić
             data.plots.forEach((path, i) => {
-                const img = document.getElementById(`plot${i+1}`);
-                if (img) img.src = path;      
+                document.getElementById(`plot${i+1}`).src = path + "?t=" + Date.now();    
             });
         
         } else {
