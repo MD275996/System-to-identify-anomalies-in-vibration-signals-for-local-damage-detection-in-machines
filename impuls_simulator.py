@@ -79,8 +79,7 @@ def gen_signal(B=20, fs=25000, varsize=25000, fmod=30, f_center=5000, bandwidth=
     y = B * impsim(fs, varsize, fmod, 1, f_center, bandwidth, shift)
 
     # Dodawanie szumu Gaussa
-    sigma = 1
-    noise = np.random.normal(0,sigma,varsize)
+    noise = np.random.normal(loc=0,scale=sigma,size=varsize)
 
     # Sygnał końcowy
     signal = noise + y
