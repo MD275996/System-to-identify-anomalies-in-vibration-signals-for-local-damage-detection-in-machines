@@ -14,7 +14,10 @@ def SK(Zxx):
         denum = np.sum(np.power(Zxx[f,:],2))
         sk_results[f] = (T*num/denum) - 2
 
-    return sk_results/max(sk_results)
+    results = sk_results/max(sk_results)
+    if np.mean(results) > 0.5:
+        return 1-results
+    return results
 
 
 def JB(Zxx):
@@ -60,7 +63,10 @@ def CVM(Zxx):
 
     for f in range(F):
         results[f] = scipy.stats.cramervonmises(Zxx[f],cdf="norm").statistic
-    return results/max(results)
+    results = results/max(results)
+    if np.mean(results) > 0.5:
+        return 1-results
+    return results
 
 def CVS(Zxx,q=0.2,p=1):
     F = Zxx.shape[0]
@@ -80,4 +86,7 @@ def CVS(Zxx,q=0.2,p=1):
 
         cvs_results[f] = N
 
-    return cvs_results/max(cvs_results)
+    results = cvs_results/max(cvs_results)
+    if np.mean(results) > 0.5:
+        return 1-results
+    return results

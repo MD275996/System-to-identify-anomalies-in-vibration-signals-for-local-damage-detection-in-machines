@@ -111,6 +111,11 @@ function showBottomMenu(filename) {
                 document.getElementById("analyze-results").innerHTML = "<p> No data.</p>"
                 return;
             }
+            const analyze_panel = document.getElementById("analyze_panel")
+            const empty_right_panel = document.getElementById("empty_right_panel")
+
+            analyze_panel.classList.remove("hidden")
+            empty_right_panel.classList.add("hidden")
             // poniższe trzeba zamienić
             data.plots.forEach((path, i) => {
                 document.getElementById(`plot${i+1}`).src = path + "?t=" + Date.now();    
