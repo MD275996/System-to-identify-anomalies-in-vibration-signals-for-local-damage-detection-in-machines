@@ -62,7 +62,7 @@ def impsim(fs, nx, fmod, amp_imp, f_center, bandwidth, shift):
 
     return yy
 
-def gen_signal(B=20, fs=25000, varsize=25000, fmod=30, f_center=5000, bandwidth=1500, shift=0, sigma = 1):
+def gen_signal(B=20, fs=25000, varsize=25000, fmod=30, f_center=5000, bandwidth=1000, shift=0, sigma = 1):
     """Parametry sygnału
     B:int - amplituda impulsów
     fs:int - częstotliwość próbkowania [Hz]
