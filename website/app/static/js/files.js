@@ -120,6 +120,7 @@ function showBottomMenu(filename) {
             data.plots.forEach((path, i) => {
                 document.getElementById(`plot${i+1}`).src = path + "?t=" + Date.now();    
             });
+            console.log(data.boundaries)
         
         } else {
             alert("Analysis failed");

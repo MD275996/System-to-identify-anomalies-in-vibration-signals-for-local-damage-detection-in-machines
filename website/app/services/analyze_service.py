@@ -11,13 +11,12 @@ READ_PATH = "static/tmp"
 
 def process_file(filename):
     # STFT
+    output_paths = []
     df = pd.read_csv(f"app/uploads/{filename}", header = None)
     signal = df[0].to_numpy()
     # folder na wyniki
     out_dir = os.path.join(PLOT_FOLDER, filename)
     os.makedirs(out_dir, exist_ok=True)
-
-    output_paths = []
 
     fs = len(signal)
     array_freq, array_tt, matrix_Zxx = scipy.signal.stft(signal, fs = fs, window = 'hann')
@@ -29,45 +28,60 @@ def process_file(filename):
     plt.ylabel('Czas [s]')
     plt.title('Spektrogram')
     plt.colorbar(label='Amplituda [dB]')
-
     output_name = "temp_spec.png"
     output_path = os.path.join(PLOT_FOLDER, output_name)
     plt.savefig(output_path)
     plt.close
     output_paths.append(f"/static/tmp/temp_spec.png")
 
+    selector_functions = [selector.SK, selector.JB, selector.KSS, selector.AD, selector.CVM, selector.CVS]
+    #wyrysowanie wykresów
+    results_list = [
+    ("SK", selector.SK(Zxx)),
+    ("JB", selector.JB(Zxx)),
+    ("KSS", selector.KSS(Zxx)),
+    ("AD", selector.AD(Zxx)),
+    ("CVM", selector.CVM(Zxx)),
+    ("CVS", selector.CVS(Zxx))
+    ]
+    colors = [
+        "red",
+        "blue",
+        "green",
+        "orange",
+        "purple",
+        "brown"
+    ]
 
-    output_name = "temp_sk.png"
-    output_path = os.path.join(PLOT_FOLDER, output_name)
-    draw_selector(Zxx, selector.SK, output_path)
-    output_paths.append(output_path[3:])
+    bands = []
+    fig, axes = plt.subplots(3, 2, figsize=(14, 12))
+    axes = axes.ravel()
 
-    output_name = "temp_jb.png"
-    output_path = os.path.join(PLOT_FOLDER, output_name)
-    draw_selector(Zxx, selector.JB, output_path)
-    output_paths.append(output_path[3:])
+    for (title, results), color in zip(results_list, colors):
+        output_name = f"temp_{title}.png"
+        plt.figure(figsize=(18, 6))
+        plt.plot(array_freq, results,color=color)
+        plt.title(f"Wyniki selektora: {title}")
+        plt.xlabel("Częstotliwość")
+        plt.ylabel("Wartość selektora")
+        plt.grid()
+        output_path = os.path.join(PLOT_FOLDER, output_name)
+        output_paths.append(output_path[3:])
+        plt.savefig(output_path)
+        plt.close
 
-    output_name = "temp_kss.png"
-    output_path = os.path.join(PLOT_FOLDER, output_name)
-    draw_selector(Zxx, selector.KSS, output_path)
-    output_paths.append(output_path[3:])
+        left,right = detect_impulse_band(array_freq, results)
+        bands.append([left,right])
+        
+    bands = np.array(bands)
+    lefts = np.delete(bands[:,0],np.argwhere(bands[:,0] == None))
+    rights = np.delete(bands[:,1],np.argwhere(bands[:,1] == None))
 
-    output_name = "temp_ad.png"
-    output_path = os.path.join(PLOT_FOLDER, output_name)
-    draw_selector(Zxx, selector.AD, output_path)
-    output_paths.append(output_path[3:])
+    left = np.median(lefts)
+    right = np.median(rights)
+    boundaries = (left,right)
 
-    output_name = "temp_cvm.png"
-    output_path = os.path.join(PLOT_FOLDER, output_name)
-    draw_selector(Zxx, selector.CVM, output_path)
-    output_paths.append(output_path[3:])
-
-    output_name = "temp_cvs.png"
-    output_path = os.path.join(PLOT_FOLDER, output_name)
-    draw_selector(Zxx, selector.CVS, output_path)
-    output_paths.append(output_path[3:])
-
-    return output_paths
+    return output_paths, boundaries
 
 def draw_selector(signal,selektor,output_path):
 
@@ -82,29 +96,53 @@ def draw_selector(signal,selektor,output_path):
     plt.savefig(output_path)
     plt.close
 
+def detect_impulse_band(freqs, selector_values, k=4, smooth_window=5):
+    """
+    freqs             - array częstotliwości
+    selector_values   - wartości selektora
+    k                 - czułość (3-6)
+    smooth_window     - wygładzanie
 
-def spike_interval_by_peak(data, threshold_factor=2):
-    data = np.array(data)
-    baseline = np.median(data)
-    uplift = np.std(data)
-    threshold = baseline + threshold_factor*uplift
+    Zwraca: (f_start, f_end) albo None
+    """
 
-    left,right = 0,0
-    # 1. Znajdź największy peak powyżej thresholdu
-    idx_peak = np.argmax(data)
-    if data[idx_peak] < threshold:
-        return left, right, threshold  # brak impulsu
+    x = np.asarray(selector_values)
 
-    # 2. Rozszerz w lewo
-    left = idx_peak
-    while left > 0 and data[left] > threshold:
-        left -= 1
-    # 3. Rozszerz w prawo
-    right = idx_peak
-    while right < len(data)-1 and data[right] > threshold:
-        right += 1
+    # 1. Wygładzenie za pomocą moving average
+    x_smooth = np.convolve(
+        x, 
+        np.ones(smooth_window)/smooth_window, 
+        mode='same'
+    )
 
-    return left, right, threshold
+    # 2. Estymacja tła (odporna na outlier)
+    median = np.median(x_smooth)
+    mad = np.median(np.abs(x_smooth - median))  # odporna sigma
+
+    if mad == 0:
+        return None, None
+
+    z = np.abs(x_smooth - median) / mad
+
+    # 3. Maska anomalii
+    anomaly_mask = z > k
+
+    if not np.any(anomaly_mask):
+        return None, None
+
+    # 4. Grupowanie w pasma
+    idx = np.where(anomaly_mask)[0]
+    splits = np.where(np.diff(idx) > 1)[0]
+
+    groups = np.split(idx, splits + 1)
+
+    # 5. Wybór najsilniejszego pasma
+    best_group = max(groups, key=len)
+
+    f_start = freqs[best_group[0]]
+    f_end   = freqs[best_group[-1]]
+
+    return np.round(f_start), np.round(f_end)
 
 def bandpass_filter(signal, fs, f_low, f_high):
     # Wykonanie FFT
@@ -124,13 +162,18 @@ def bandpass_filter(signal, fs, f_low, f_high):
     return filtered_signal, freqs, fft_signal, fft_signal_filtered
 
 def impuls_detection(filtered,impuls_threshold):
-    filtered_energy  = np.sum(filtered**2)
-    impulses = (filtered > np.mean(filtered) + impuls_threshold*np.std(filtered)) | (filtered < np.mean(filtered) - impuls_threshold*np.std(filtered))
+    filtered = np.abs(filtered)
+    filtered_energy  = np.mean(filtered**2)
 
-    filtered_no_impulses = filtered.copy()
-    filtered_no_impulses[impulses] = 0
-    filtered_no_impulses_energy = np.sum(filtered_no_impulses**2)
-    return filtered_no_impulses_energy/filtered_energy
+    if filtered_energy == 0 or np.isnan(filtered_energy):
+        return 0.0
+
+    threshold = np.mean(filtered) + impuls_threshold*np.std(filtered)
+
+    filtered_impulses = np.maximum(filtered - threshold, 0)
+    filtered_impulses_energy = np.mean(filtered_impulses**2)
+
+    return filtered_impulses_energy/filtered_energy
 
 def calculate_analysis(signal, selektor, filter_threshold=1, impuls_threshold=1):
     #spektrogram

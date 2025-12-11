@@ -27,13 +27,17 @@ def list_files():
 
 def delete_file(filename):
     filename = secure_filename(filename)
-
+    plotname = filename.replace(".csv",".png")
+    plot_path = os.path.join(PLOT_FOLDER, plotname)
     file_path = os.path.join(UPLOAD_FOLDER, filename)
+
 
     # 1. Plik musi istnieć
     if not os.path.exists(file_path):
         return False
-
+    if os.path.exists(plot_path):
+        os.remove(plot_path)
+        
     # 2. Plik nie może być katalogiem
     if os.path.isdir(file_path):
         print("WARNING: Attempt to delete a directory, not a file!", file_path)

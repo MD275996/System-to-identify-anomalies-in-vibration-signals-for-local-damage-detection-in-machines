@@ -10,11 +10,12 @@ analyze_api = Blueprint('analyze_api', __name__)
 
 def api_analyze_file(filename):
     try:
-        output_paths = process_file(filename)
+        output_paths, boundaries = process_file(filename)
 
         session["analyze_results"] = {
             "filename": filename,
             "plots":output_paths,
+            "boundaries": boundaries
         }
 
         return jsonify({"success":True})
@@ -30,4 +31,5 @@ def api_analyze_result():
         "success":True,
         "filename": result["filename"],
         "plots": result["plots"],
+        "boundaries": result["boundaries"],
     })
