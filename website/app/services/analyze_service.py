@@ -5,31 +5,26 @@ import matplotlib.pyplot as plt
 import os
 import pandas as pd
 import app.services.ifb_selectors as selector
+from werkzeug.utils import secure_filename
 
 PLOT_FOLDER = "app/static/tmp"
 READ_PATH = "static/tmp"
+UPLOAD_FOLDER = "app/uploads"
 
-def process_file(filename):
-    # STFT
-    output_paths = []
-    df = pd.read_csv(f"app/uploads/{filename}", header = None)
-    signal = df[0].to_numpy()
-    # folder na wyniki
-    out_dir = os.path.join(PLOT_FOLDER, filename)
-    os.makedirs(out_dir, exist_ok=True)
-
+def process_file(signal):
     fs = len(signal)
     array_freq, array_tt, matrix_Zxx = scipy.signal.stft(signal, fs = fs, window = 'hann')
     Zxx = np.abs(matrix_Zxx)
 
+    output_paths = []
+    output_name = "temp_spec.png"
+    output_path = os.path.join(PLOT_FOLDER, output_name)
     plt.figure(figsize=(18, 6))
     plt.pcolormesh(array_freq, array_tt, 10*np.log10(Zxx.T), shading='gouraud', cmap='plasma')
     plt.xlabel('Częstotliwość [Hz]')
     plt.ylabel('Czas [s]')
     plt.title('Spektrogram')
     plt.colorbar(label='Amplituda [dB]')
-    output_name = "temp_spec.png"
-    output_path = os.path.join(PLOT_FOLDER, output_name)
     plt.savefig(output_path)
     plt.close
     output_paths.append(f"/static/tmp/temp_spec.png")
@@ -82,6 +77,25 @@ def process_file(filename):
     boundaries = (left,right)
 
     return output_paths, boundaries
+
+def get_signal_from_file(filename):
+    df = pd.read_csv(f"app/uploads/{filename}", header = None)
+    signal = df[0].to_numpy()
+    return signal
+
+def draw_signal(signal,filename):
+    output_name = filename.replace(".csv",".png")
+    output_path = os.path.join(PLOT_FOLDER, output_name)
+    plt.figure(figsize=(10, 4))
+    plt.plot(signal, linewidth=1)
+    plt.title(f"Sygnał w czasie")
+    plt.xlabel("Próbka")
+    plt.ylabel("Amplituda")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig(output_path)
+    plt.close
+    return output_path[3:]
 
 def draw_selector(signal,selektor,output_path):
 
@@ -161,7 +175,7 @@ def bandpass_filter(signal, fs, f_low, f_high):
     
     return filtered_signal, freqs, fft_signal, fft_signal_filtered
 
-def impuls_detection(filtered,impuls_threshold):
+def impuls_detection(filtered,impuls_threshold=3):
     filtered = np.abs(filtered)
     filtered_energy  = np.mean(filtered**2)
 
