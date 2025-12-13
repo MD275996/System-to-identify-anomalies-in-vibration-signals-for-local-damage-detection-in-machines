@@ -185,7 +185,7 @@ def calculate_analysis(signal, selektor, filter_threshold=1, impuls_threshold=1)
     results = selektor(Zxx)
     
     #odnalezienie granic
-    left, right, threshold = spike_interval_by_peak(results,filter_threshold)
+    left, right, threshold = detect_impulse_band(fs,results)
 
     #filtracja na podstawie otrzymanych granic
     filtered, _, _, _ = bandpass_filter(signal, fs, array_freq[left], array_freq[right])
@@ -228,7 +228,7 @@ def draw_analysis(signal, selektor, filter_threshold=1, impuls_threshold=1):
 
     #selektor
     results = selektor(Zxx)
-    left, right, threshold = spike_interval_by_peak(results,filter_threshold)
+    left, right, threshold = detect_impulse_band(fs,results)
     #wyrysowanie wykresów
     plt.figure(figsize=(18,5))
     plt.axvline(x=array_freq[left], color = "red", linestyle = "--")

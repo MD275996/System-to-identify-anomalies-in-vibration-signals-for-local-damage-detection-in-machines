@@ -111,6 +111,9 @@ function showBottomMenu(filename) {
                 document.getElementById("analyze-results").innerHTML = "<p> No data.</p>"
                 return;
             }
+            document.getElementById("filename").innerHTML = `
+                <h2>Analysis shown for file ${filename}</h2>
+            `;
             const analyze_panel = document.getElementById("analyze_panel")
             const empty_right_panel = document.getElementById("empty_right_panel")
 
@@ -120,7 +123,10 @@ function showBottomMenu(filename) {
             data.plots.forEach((path, i) => {
                 document.getElementById(`plot${i+1}`).src = path + "?t=" + Date.now();    
             });
-            console.log(data.boundaries)
+            document.getElementById("boundaries-results").innerHTML = `
+                <h3>Boundaries</h3>
+                <p>Detected IFB: [${data.boundaries[0]} - ${data.boundaries[1]}]Hz</p>
+            `;
         
         } else {
             alert("Analysis failed");
