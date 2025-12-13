@@ -1,6 +1,8 @@
 # draw spectrogram
 import scipy.signal
 import numpy as np
+import matplotlib
+matplotlib.use("Agg") 
 import matplotlib.pyplot as plt
 import os
 import pandas as pd
@@ -26,10 +28,8 @@ def process_file(signal):
     plt.title('Spektrogram')
     plt.colorbar(label='Amplituda [dB]')
     plt.savefig(output_path)
-    plt.close
+    plt.close()
     output_paths.append(f"/static/tmp/temp_spec.png")
-
-    selector_functions = [selector.SK, selector.JB, selector.KSS, selector.AD, selector.CVM, selector.CVS]
     #wyrysowanie wykresów
     results_list = [
     ("SK", selector.SK(Zxx)),
@@ -63,7 +63,7 @@ def process_file(signal):
         output_path = os.path.join(PLOT_FOLDER, output_name)
         output_paths.append(output_path[3:])
         plt.savefig(output_path)
-        plt.close
+        plt.close()
 
         left,right = detect_impulse_band(array_freq, results)
         bands.append([left,right])
@@ -94,7 +94,7 @@ def draw_signal(signal,filename):
     plt.grid(True)
     plt.tight_layout()
     plt.savefig(output_path)
-    plt.close
+    plt.close()
     return output_path[3:]
 
 def draw_selector(signal,selektor,output_path):
@@ -108,7 +108,7 @@ def draw_selector(signal,selektor,output_path):
     plt.ylabel("Wartość selektora")
     plt.grid()
     plt.savefig(output_path)
-    plt.close
+    plt.close()
 
 def detect_impulse_band(freqs, selector_values, k=4, smooth_window=5):
     """
@@ -119,43 +119,31 @@ def detect_impulse_band(freqs, selector_values, k=4, smooth_window=5):
 
     Zwraca: (f_start, f_end) albo None
     """
-
     x = np.asarray(selector_values)
-
-    # 1. Wygładzenie za pomocą moving average
+    # Wygładzenie za pomocą moving average
     x_smooth = np.convolve(
         x, 
         np.ones(smooth_window)/smooth_window, 
         mode='same'
     )
-
-    # 2. Estymacja tła (odporna na outlier)
+    # Estymacja tła (odporna na outlier)
     median = np.median(x_smooth)
     mad = np.median(np.abs(x_smooth - median))  # odporna sigma
-
     if mad == 0:
         return None, None
-
     z = np.abs(x_smooth - median) / mad
-
-    # 3. Maska anomalii
+    # Maska anomalii
     anomaly_mask = z > k
-
     if not np.any(anomaly_mask):
         return None, None
-
-    # 4. Grupowanie w pasma
+    # Grupowanie w pasma
     idx = np.where(anomaly_mask)[0]
     splits = np.where(np.diff(idx) > 1)[0]
-
     groups = np.split(idx, splits + 1)
-
-    # 5. Wybór najsilniejszego pasma
+    # Wybór najsilniejszego pasma
     best_group = max(groups, key=len)
-
     f_start = freqs[best_group[0]]
     f_end   = freqs[best_group[-1]]
-
     return np.round(f_start), np.round(f_end)
 
 def bandpass_filter(signal, fs, f_low, f_high):

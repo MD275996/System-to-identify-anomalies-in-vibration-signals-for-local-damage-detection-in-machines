@@ -1,5 +1,7 @@
 import os
 import pandas as pd
+import matplotlib
+matplotlib.use("Agg") 
 import matplotlib.pyplot as plt
 from werkzeug.utils import secure_filename
 
@@ -70,6 +72,6 @@ def generate_plot(filename):
     output_name = filename.replace(".csv",".png")
     output_path = os.path.join(PLOT_FOLDER, output_name)
     plt.savefig(output_path)
-    plt.close
+    plt.close()
 
     return f"static/tmp/{output_name}"

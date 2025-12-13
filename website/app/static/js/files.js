@@ -113,42 +113,86 @@ document.addEventListener("DOMContentLoaded", () =>{
 
     //obsługa przycisku Analyze
     document.getElementById("analyze-btn").addEventListener("click", async () => {
-        const res = await fetch(`/api/analyze/${currentFilename}`, {
-            method: "POST"
-        });
-        const data = await res.json();
+        if (!currentFilename) return;
 
-        if (data.success) {
-            const res = await fetch("/api/analyze/result");
+        document.getElementById("filter-results").classList.add("hidden");
+        document.getElementById("custom-boundaries-form").classList.add("hidden");
+        document.getElementById("filter-boundaries-prompt").classList.remove("hidden");
+
+        const analyzePanel = document.getElementById("analyze_panel");
+        analyzePanel.classList.add("loading"); // panel wyszarzony i zablokowany
+
+        try {
+            // Wywołanie analizy pliku
+            const res = await fetch(`/api/analyze/${currentFilename}`, { method: "POST" });
             const data = await res.json();
 
-            if (!data.success){
-                document.getElementById("analyze-results").innerHTML = "<p> No data.</p>"
+            if (!data.success) {
+                alert("Analysis failed on server");
                 return;
             }
-            document.getElementById("analyze-results-filename").innerHTML = `
-                <h2>Analysis shown for file ${currentFilename}</h2>
-            `;
-            const analyze_panel = document.getElementById("analyze_panel")
-            const empty_right_panel = document.getElementById("empty_right_panel")
 
-            analyze_panel.classList.remove("hidden")
-            empty_right_panel.classList.add("hidden")
-            // poniższe trzeba zamienić
-            data.plots.forEach((path, i) => {
-                document.getElementById(`plot${i+1}`).src = path + "?t=" + Date.now();    
+            // Pobranie wyników analizy
+            const resResult = await fetch("/api/analyze/result");
+            const resultData = await resResult.json();
+
+            if (!resultData.success) {
+                document.getElementById("analyze-results").innerHTML = "<p>No data.</p>";
+                return;
+            }
+
+            // Ustawienie nagłówka
+            document.getElementById("analyze-results-filename").innerHTML = `
+                <h2>Analysis shown for file: <b> ${currentFilename} </b></h2>
+            `;
+
+            // Pokazanie panelu
+            const analyze_panel = document.getElementById("analyze_panel");
+            const empty_right_panel = document.getElementById("empty_right_panel");
+            analyze_panel.classList.remove("hidden");
+            empty_right_panel.classList.add("hidden");
+
+            // Czyszczenie kontenerów przed wstawieniem nowych wykresów
+            const specContainer = document.getElementById("spectrogram-container");
+            const selContainer = document.getElementById("selectors-container");
+            specContainer.innerHTML = "";
+            selContainer.innerHTML = "";
+
+            // Wstawienie spektrogramu (pierwszy wykres)
+            const specImg = document.createElement("img");
+            specImg.src = resultData.plots[0] + "?t=" + Date.now();
+            specImg.alt = "Spectrogram";
+            specContainer.appendChild(specImg);
+
+            // Wstawienie wykresów selektorów (pozostałe wykresy)
+            resultData.plots.slice(1).forEach((path, i) => {
+                const div = document.createElement("div");
+                const title = document.createElement("h3");
+                title.textContent = ["Spectral Kurtosis", "Jarque-Bera", "Kolmogorov-Smirnov", 
+                                    "Anderson-Darling", "Cramer-von Mises", "Conditional Variance"][i] || `Selector ${i+1}`;
+                const img = document.createElement("img");
+                img.src = path + "?t=" + Date.now();
+                img.alt = title.textContent;
+
+                div.appendChild(title);
+                div.appendChild(img);
+                selContainer.appendChild(div);
             });
-            left = data.boundaries[0];
-            right = data.boundaries[1];
+
+            // Ustawienie granic
+            left = resultData.boundaries[0];
+            right = resultData.boundaries[1];
             document.getElementById("boundaries-results").innerHTML = `
                 <h3>Boundaries</h3>
                 <p>Detected IFB: [${left} - ${right}] Hz</p>
             `;
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // Obsługa przycisku "Select own boundaries"    
-        } else {
-            alert("Analysis failed");
-        }
+
+        } catch (err) {
+            console.error(err);
+            alert("Error during analysis. Check console.");
+        } finally {
+        analyzePanel.classList.remove("loading"); // odblokowanie panelu po zakończeniu
+    }
     });
 
     //obsługa przycisku wyboru Select own boundaries
@@ -190,8 +234,8 @@ document.addEventListener("DOMContentLoaded", () =>{
     //obsługa przycisku do wprowadzenia własnych granic
     document.getElementById("custom-boundaries-form").addEventListener("submit", async (e) => {
         e.preventDefault();
-        const left = document.getElementById("lower-boundary").value;
-        const right = document.getElementById("upper-boundary").value;
+        left = document.getElementById("lower-boundary").value;
+        right = document.getElementById("upper-boundary").value;
         alert(`Proceeding with custom boundaries: [${left} - ${right}] Hz`);
         // API do analizy z własnymi granicami
         const res = await fetch("/api/analyze/filter", {
@@ -212,16 +256,3 @@ document.addEventListener("DOMContentLoaded", () =>{
         }
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-

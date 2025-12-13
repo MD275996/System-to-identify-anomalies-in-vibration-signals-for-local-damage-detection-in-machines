@@ -6,7 +6,7 @@
 
     <div class="left-panel">            <!--   prawa kolumna -->
         <div class="file-grid"></div>
-        <div id="plot-modal", class = "modal hidden">
+        <div id="plot-modal" class = "modal hidden">
             <div class="modal-content">
                 <span id="plot-close" class="close">&times;</span>
                 <img id="plot-image" src="" alt="Plot preview">
@@ -21,35 +21,33 @@
         </div>
     </div>
     <div id="analyze_panel" class="right-panel hidden">               <!--   prawa kolumna -->
-        <h2>Analysis panel</h2>
         <div id="analyze-results" class="analyze">
             <h1 id="analyze-results-filename"></h1>
-            <h2>Spectrogram</h2>
-            <img id="plot1" src="" alt="Nie udało się wyświetlić spektrogramu">
-            <h2>Selectors</h2>
-            <h3>Spectral Kurtosis</h3>
-            <img id="plot2" src="" alt="Nie udało się wyświetlić spektrogramu">
-            <h3>Jarque-Bera</h3>
-            <img id="plot3" src="" alt="Nie udało się wyświetlić spektrogramu">
-            <h3>Kolmogorov-Smirnov</h3>
-            <img id="plot4" src="" alt="Nie udało się wyświetlić spektrogramu">
-            <h3>Anderson-Darling</h3>
-            <img id="plot5" src="" alt="Nie udało się wyświetlić spektrogramu">
-            <h3>Cramer-von Mises</h3>
-            <img id="plot6" src="" alt="Nie udało się wyświetlić spektrogramu">
-            <h3>Conditional Variance</h3>
-            <img id="plot7" src="" alt="Nie udało się wyświetlić spektrogramu">
+
+            <div id="spectrogram-section">
+                <h2>Spectrogram</h2>
+                <div id="spectrogram-container"></div>
+            </div>
+
+            <div id="selectors-section">
+                <h2>Selectors</h2>
+                <div id="selectors-container"></div>
+            </div>
+
             <div id="boundaries-results"></div>
+
             <div id="filter-boundaries-prompt">
                 <p>Proceed with detected boundaries?</p>
                 <button id="proceed-btn">Yes</button>
                 <button id="insert-boundaries-btn">Select own boundaries</button>
             </div>
-            <div id="custom-boundaries-form" class="hidden">
-                <input type="number" name="" id="lower-boundary-input" placeholder="Lower boundary">
-                <input type="number" name="" id="upper-boundary-input" placeholder="Upper boundary">
+
+            <form id="custom-boundaries-form" class="hidden">
+                <input type="number" id="lower-boundary" placeholder="Lower boundary">
+                <input type="number" id="upper-boundary" placeholder="Upper boundary">
                 <button type="submit">Filter with selected boundaries</button>
-            </div>
+            </form>
+
             <div id="filter-results" class="hidden">
                 <h3>Filtered signal</h3>
                 <img id="filtered-signal" src="" alt="Nie udało się wyświetlić">

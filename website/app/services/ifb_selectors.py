@@ -1,20 +1,21 @@
 import numpy as np
 import scipy
-import matplotlib.pyplot as plt
-from scipy.signal import stft
-from scipy.stats import norm
+
+def normalize(x):
+    m = np.max(x)
+    if m<= 0 or np.isnan(m):
+        return x
+    return x/m
 
 def SK(Zxx):
     F = Zxx.shape[0]
     T = Zxx.shape[1]
-    sk_results = np.zeros(F)
 
-    for f in range(F):
-        num = np.sum(np.power(Zxx[f,:],4))
-        denum = np.sum(np.power(Zxx[f,:],2))
-        sk_results[f] = (T*num/denum) - 2
+    num = np.sum(Zxx**4, axis=1)
+    den = np.sum(Zxx**2, axis=1)
+    sk = (T * num / den**2) - 2
 
-    results = sk_results/max(sk_results)
+    results = normalize(sk)
     if np.mean(results) > 0.5:
         return 1-results
     return results
@@ -27,10 +28,11 @@ def JB(Zxx):
 
     for f in range(F):
         s = scipy.stats.skew(Zxx[f])    
-        k = scipy.stats.kurtosis(Zxx[f])
-        jb_results[f] = T/6 * (s**2 + (np.power(k-1,2)/4))
+        k = scipy.stats.kurtosis(Zxx[f], fisher=True)
+        jb_results[f] = T/6 * (s**2 + (np.power(k,2)/4))
     
-    return jb_results/max(jb_results)
+
+    return normalize(jb_results)
 
 def KSS(Zxx):
     F = Zxx.shape[0]
@@ -39,14 +41,15 @@ def KSS(Zxx):
     for f in range(F):
         mean_signal = np.mean(Zxx[f])
         std_signal = np.std(Zxx[f])
-        cdf_sample = np.zeros(T)
-        for i in range(T):
-            cdf_sample[i] = scipy.stats.norm.cdf(Zxx[f,i],loc=mean_signal, scale=std_signal)
-        test_stats = scipy.stats.kstest(Zxx[f],cdf_sample)
-        kss_results[f] = 1/test_stats.statistic
+        stat = scipy.stats.kstest(
+            Zxx[f],
+            'norm',
+            args=(mean_signal, std_signal)
+        ).statistic
+        kss_results[f] = 1/stat
     
-    return kss_results/max(kss_results)
 
+    return normalize(kss_results)
 
 def AD(Zxx):    
     F = Zxx.shape[0]
@@ -54,7 +57,9 @@ def AD(Zxx):
     ad_results = np.zeros(F)
     for f in range(F):
         ad_results[f] = scipy.stats.anderson(Zxx[f], dist='norm').statistic
-    return ad_results/max(ad_results)  
+
+
+    return normalize(ad_results)
 
 def CVM(Zxx):
     F = Zxx.shape[0]
@@ -82,11 +87,11 @@ def CVS(Zxx,q=0.2,p=1):
         R = sorted_signal[sorted_signal > upper_threshold]
         M = sorted_signal[(lower_threshold < sorted_signal) & ( sorted_signal<= upper_threshold)]
 
-        N = 1/p * ((np.var(L)-np.var(M))/np.var(Zxx[0])+(np.var(R)-np.var(M))/np.var(Zxx[0])) * np.sqrt(len(Zxx[f]))
+        N = 1/p * ((np.var(L)-np.var(M))/np.var(Zxx[f])+(np.var(R)-np.var(M))/np.var(Zxx[f])) * np.sqrt(len(Zxx[f]))
 
         cvs_results[f] = N
 
-    results = cvs_results/max(cvs_results)
-    if np.mean(results) > 0.5:
-        return 1-results
-    return results
+    cvs_results = normalize(cvs_results)
+    if np.mean(cvs_results) > 0.5:
+        return 1-cvs_results
+    return cvs_results

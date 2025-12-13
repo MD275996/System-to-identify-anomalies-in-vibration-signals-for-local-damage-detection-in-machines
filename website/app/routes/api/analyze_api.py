@@ -28,30 +28,41 @@ def api_analyze_file(filename):
     
 @analyze_api.post("/api/analyze/filter")                           
 def api_analize_filter():
-    data = request.get_json()
+    try:
+        if "filename" not in session:
+            return jsonify({
+                "success": False,
+                "error": "No analysis context"
+            }),400
+        data = request.get_json()
 
-    lower = data.get("left")
-    upper = data.get("right")
+        lower = data.get("left")
+        upper = data.get("right")
 
-    if lower is None or upper is None:
+        if lower is None or upper is None:
+            return jsonify({
+                "success": False,
+                "error": "Missing boundaries"
+            }), 400
+
+        signal = get_signal_from_file(session.get("filename"))
+        filtered,_,_,_ =bandpass_filter(signal, len(signal), lower, upper)
+        
+        plot_path = draw_signal(filtered, "filtered_"+session.get("filename"))
+        session["filtered_signal"] = plot_path
+
+        result = impuls_detection(filtered)
+        if result > 0.025:
+            session["detection"]="Impulse detected"
+        else:
+            session["detection"]="No impulse detected"
+
+        return jsonify({"success": True})
+    except Exception as e:
         return jsonify({
             "success": False,
-            "error": "Missing boundaries"
-        }), 400
-
-    signal = get_signal_from_file(session.get("filename"))
-    filtered,_,_,_ =bandpass_filter(signal, len(signal), lower, upper)
-    
-    plot_path = draw_signal(filtered, "filtered_"+session.get("filename"))
-    session["filtered_signal"] = plot_path
-
-    result = impuls_detection(filtered)
-    if result > 0.025:
-        session["detection"]="Impulse detected"
-    else:
-        session["detection"]="No impulse detected"
-
-    return jsonify({"success": True})
+            "error": str(e)
+        }),500
     
 @analyze_api.get("/api/analyze/result")
 def api_analyze_result():
@@ -70,11 +81,14 @@ def api_analyze_result():
 
 @analyze_api.get("/api/analyze/filter_results")    
 def api_analyze_filter_result():
-    print("Włączone 1")
     detection = session.get("detection")
     plot_path = session.get("filtered_signal")
-    if not detection:
-        return jsonify({"success": False, "error": "Filtration failed"}), 404
+
+    if not detection or not plot_path:
+        return jsonify({
+            "success": False,
+            "error": "Filtration failed"
+            }), 404
     return jsonify({
         "success":True,
         "detection": detection,
