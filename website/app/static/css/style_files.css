@@ -88,15 +88,28 @@
     pointer-events: none; /* blokuje interakcję */
     opacity: 0.6; /* wyszarzenie */
 }
-
-/* opcjonalnie można dodać spinner */
+/* spinner w overlay */
 .right-panel.loading::after {
     content: "";
     position: absolute;
-    inset: 0;
-    background: rgba(255,255,255,0.5); /* półprzezroczyste nakładka */
-    z-index: 10;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    margin: -25px 0 0 -25px; /* wyśrodkowanie */
+    border: 6px solid rgba(0, 0, 0, 0.1);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    z-index: 20;
 }
+
+/* animacja obrotu */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+
 
 /* nagłówki panelu */
 .right-panel h2 {

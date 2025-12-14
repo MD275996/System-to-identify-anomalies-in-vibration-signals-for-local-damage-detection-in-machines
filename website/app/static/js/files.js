@@ -95,6 +95,7 @@ document.addEventListener("DOMContentLoaded", () =>{
             alert("Failed to delete file. Please try again.");
         }
     });
+
     // Obsługa przycisku Close
     document.getElementById("close-btn").addEventListener("click", () => {
         const bottomMenu = document.getElementById("bottom-menu");
@@ -108,8 +109,6 @@ document.addEventListener("DOMContentLoaded", () =>{
         analyze_panel.classList.add("hidden")
         empty_right_panel.classList.remove("hidden")
     });
-
-
 
     //obsługa przycisku Analyze
     document.getElementById("analyze-btn").addEventListener("click", async () => {
@@ -183,8 +182,8 @@ document.addEventListener("DOMContentLoaded", () =>{
             left = resultData.boundaries[0];
             right = resultData.boundaries[1];
             document.getElementById("boundaries-results").innerHTML = `
-                <h3>Boundaries</h3>
-                <p>Detected IFB: [${left} - ${right}] Hz</p>
+                <h3>IFB boundaries</h3>
+                <span style="width: 100%; text-align: center;"><p>Detected IFB: [${left} - ${right}] Hz</p></span>
             `;
 
         } catch (err) {
@@ -217,7 +216,6 @@ document.addEventListener("DOMContentLoaded", () =>{
         const result = await res.json();                
         //Wyniki po dokonanej filtracji
         if(result.success){
-            console.log(1)
             const res = await fetch("/api/analyze/filter_results");
             const data = await res.json();
             document.getElementById("custom-boundaries-form").classList.add("hidden");
@@ -225,6 +223,11 @@ document.addEventListener("DOMContentLoaded", () =>{
             document.getElementById("filter-results").classList.remove("hidden");
             document.getElementById(`filtered-signal`).src = data.plot + "?t=" + Date.now();
             document.getElementById(`result-message`).innerHTML = data.detection
+            if (data.detection == "Impulse detected"){
+                document.getElementById("result-message").style.color = "red"
+            } else if(data.detection == "No impulse detected"){
+                document.getElementById("result-message").style.color = "green"
+            }
         } else {
             alert("Filtering failed.");
         }
@@ -234,9 +237,26 @@ document.addEventListener("DOMContentLoaded", () =>{
     //obsługa przycisku do wprowadzenia własnych granic
     document.getElementById("custom-boundaries-form").addEventListener("submit", async (e) => {
         e.preventDefault();
-        left = document.getElementById("lower-boundary").value;
-        right = document.getElementById("upper-boundary").value;
-        alert(`Proceeding with custom boundaries: [${left} - ${right}] Hz`);
+
+        left = Number(document.getElementById("lower-boundary").value);
+        right = Number(document.getElementById("upper-boundary").value);
+
+        if (!Number.isFinite(left) || !Number.isFinite(right)) {
+            alert("Please enter valid numeric boundaries.");
+            return;
+        }
+
+        if (left >= right) {
+            alert("Lower boundary must be smaller than upper boundary.");
+            return;
+        }
+
+        document.getElementById("boundaries-results").innerHTML = `
+                <h3>IFB boundaries</h3>
+                <span style="width: 100%; text-align: center;"><p>IFB: [${left} - ${right}] Hz</p></span>
+            `;
+
+
         // API do analizy z własnymi granicami
         const res = await fetch("/api/analyze/filter", {
             method: "POST",
@@ -249,10 +269,18 @@ document.addEventListener("DOMContentLoaded", () =>{
             })
         });
         const result = await res.json();
+        //Wyniki po dokonanej filtracji
         if(result.success){
-            alert("Filtering completed with detected boundaries.");
+            const res = await fetch("/api/analyze/filter_results");
+            const data = await res.json();
+            document.getElementById("custom-boundaries-form").classList.add("hidden");
+            document.getElementById("filter-boundaries-prompt").classList.add("hidden");
+            document.getElementById("filter-results").classList.remove("hidden");
+            document.getElementById(`filtered-signal`).src = data.plot + "?t=" + Date.now();
+            document.getElementById(`result-message`).innerHTML = data.detection
         } else {
             alert("Filtering failed.");
         }
+
     });
 });
