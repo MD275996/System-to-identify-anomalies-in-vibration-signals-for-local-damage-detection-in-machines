@@ -12,6 +12,7 @@ def create_app():
     from app.routes.base import base_page
     from app.routes.load import load_page
     from app.routes.generate import generate_page  
+    from app.routes.info import info_page  
 
     #rejestracja blueprintów
     app.register_blueprint(files_api)
@@ -21,6 +22,7 @@ def create_app():
     app.register_blueprint(files_page)
     app.register_blueprint(base_page)
     app.register_blueprint(load_page)
+    app.register_blueprint(info_page)
     app.register_blueprint(generate_page)
     return app
 

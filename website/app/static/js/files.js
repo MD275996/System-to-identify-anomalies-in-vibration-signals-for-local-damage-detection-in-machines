@@ -53,8 +53,6 @@ document.addEventListener("DOMContentLoaded", () =>{
                 alert("Plot generation failed!");
                 return;
             }
-
-            console.log(1)
             // ustaw obraze w modalu
             const img = document.getElementById("plot-image");
             img.src = data.url;

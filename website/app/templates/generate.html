@@ -2,7 +2,7 @@
 {% block content %}
 
 <h1>Generate data</h1>
-<h1>Fill out the form</h1>
+<span style="width: 100%; text-align: center;"><h2>Fill out the form</h2></span>
 <div class="form-container">
     <form id="generateForm">
         <label>Name:</label><br>
@@ -37,6 +37,12 @@
         
         <button type="submit">Generate signal</button>
     </form>
+    <div id="generate-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="generate-modal-text">Message</h2>
+            <button id="generate-modal-next">Continue</button>
+        </div>
+    </div>
 </div>
 
 <script src="{{ url_for('static', filename='js/generate.js')}}"></script>

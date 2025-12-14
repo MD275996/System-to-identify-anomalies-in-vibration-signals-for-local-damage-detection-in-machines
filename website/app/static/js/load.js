@@ -5,7 +5,7 @@ document.getElementById("upload-form").addEventListener("submit", async function
     try {
         const file = document.getElementById("file-input").files[0];
         if (!file) {
-            alert("Please select a file to upload.");
+            showModal("Please select a file to upload.");
             return;
         }
 
@@ -20,30 +20,52 @@ document.getElementById("upload-form").addEventListener("submit", async function
         const data = await response.json();
 
         if (data.success) {
-            alert("File uploaded successfully: " + data.filename);
-            // Po udanym uploadzie, przekieruj do strony z plikami
-            window.location.href = "/files";
+            showModal(`Załadowano plik ${data.filename}`, "/files");
         } else {
-            alert("File upload failed: " + (data.error || "Unknown error"));
+            showModal("File upload failed: " + (data.error || "Unknown error"));
         }
     } catch (error) {
-        console.error("Upload error:", error);
-        alert("Error during file upload: " + error.message);
-    }
+    console.error("Upload error:", error);
+    showModal("Error during file upload: " + error.message);
+    } 
 });
 
+function showModal(message, redirectUrl = null) {
+    const modal = document.getElementById("upload-modal");
+    const modalText = document.getElementById("upload-modal-text");
+    const nextBtn = document.getElementById("upload-modal-next");
+
+    modalText.textContent = message;
+    modal.classList.remove("hidden");
+
+    // Usuń poprzedni listener, żeby nie nakładały się
+    nextBtn.replaceWith(nextBtn.cloneNode(true));
+    const newNextBtn = document.getElementById("upload-modal-next");
+
+    newNextBtn.addEventListener("click", () => {
+        modal.classList.add("hidden");
+        console.log(1)
+        if (redirectUrl) {
+            window.location.href = redirectUrl;
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  const dropzone = document.getElementById('dropzone');
-  const input = document.getElementById('file-input');
-  const fileName = document.getElementById('file-name');
-  const form = document.getElementById('upload-form');
-  const progress = document.getElementById('progress');
-  const progressBar = document.getElementById('progress-bar');
-  const error = document.getElementById('error');
+    const dropzone = document.getElementById('dropzone');
+    const input = document.getElementById('file-input');
+    const fileName = document.getElementById('file-name');
+    const form = document.getElementById('upload-form');
+    const progress = document.getElementById('progress');
+    const progressBar = document.getElementById('progress-bar');
+    const error = document.getElementById('error');
 
   const setFile = (file) => {
     if (!file) return;
+    const preview = document.getElementById("file-preview");
     fileName.textContent = file.name;
+    fileName.classList.add("visible");
+    preview.classList.remove("hidden"); // pokaż ikonę i nazwę
     error.hidden = true;
   };
 
@@ -66,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         const file = document.getElementById("file-input").files[0];
         if (!file) {
-            alert("Please select a file to upload.");
+            showModal("Please select a file to upload.");
             return;
         }
 
@@ -81,15 +103,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await response.json();
 
         if (data.success) {
-            alert("File uploaded successfully: " + data.filename);
-            // Po udanym uploadzie, przekieruj do strony z plikami
-            window.location.href = "/files";
+            // ustaw nazwę pliku w modal
+            const modal = document.getElementById("upload-modal");
+            const modalText = document.getElementById("upload-modal-text");
+            modalText.textContent = `Załadowano plik ${data.filename}`;
+            modal.classList.remove("hidden"); // pokaż modal
+
+            // obsługa przycisku "Dalej"
+            document.getElementById("upload-modal-next").addEventListener("click", () => {
+                modal.classList.add("hidden"); // zamknij modal
+                window.location.href = "/files"; // przekieruj
+            }); 
         } else {
-            alert("File upload failed: " + (data.error || "Unknown error"));
-        }
+            showModal("File upload failed: " + (data.error || "Unknown error"));
+            }
     } catch (error) {
-        console.error("Upload error:", error);
-        alert("Error during file upload: " + error.message);
+    console.error("Upload error:", error);
+    showModal("Error during file upload: " + error.message);
     }
   });
 });
