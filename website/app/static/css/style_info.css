@@ -8,3 +8,22 @@
     display: flex;
     flex-direction: column;
 }
+
+.signal-examples {
+    display: flex;
+    gap: 20px; /* odstęp między obrazkami */
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.signal-example {
+    text-align: center;
+}
+
+.signal-example img {
+    max-width: 100%; /* dopasuj rozmiar */
+    height: auto;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+}
