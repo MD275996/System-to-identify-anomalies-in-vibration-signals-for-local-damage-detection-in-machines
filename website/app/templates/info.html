@@ -1,7 +1,182 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Information</h1>
+<p>Here you will find all the information about the mathematical background of the used tools</p>
+<div class="content">
 
+    <h2>Assumptions about the signal</h2>
+    <p>
+    There is a general assumption, based on observations, that vibrations of a healthy machine can be modeled as Gaussian white noise.
+    In the presence of a fault, periodically repeating impulsive components appear within the noise.
+    </p>
+    <p>
+    Example of a healthy signal and a severely damaged signal.
+    </p>
+</div>
+
+<div class="content">
+    <h2>Spectrogram</h2>
+    <!-- opisanie co to spektrogram -->
+    <p>
+    A spectrogram is defined as the magnitude of the Short-Time Fourier Transform:
+    \( |STFT(t,f)| \).
+    The STFT illustrates how the frequency spectrum of a signal evolves over time.
+    The values in the spectrogram correspond to the amplitudes of individual frequency components within specific time intervals.
+    </p>
+    <!-- opisanie krótkookresowej transformaty fouriera -->
+    <p>In the computations, a discrete version of the equation is used.  
+    For observations \( X_1, X_2, \ldots, X_N \), a time instant \( t \in T \),  
+    and a frequency \( f \in F \):
+    \[
+        STFT(t,f) = \sum_{k=0}^{N-1} X_k w(t-k)e^{2j\pi fk/N}.
+    \]</p>
+
+        
+    <p>obrazek spektrogramu zdrowego i chorego</p>
+    <!-- Opisanie jak czytać spektrogram -->
+    <p>
+    It is worth noting that for a signal corresponding to white noise,  
+    the spectrogram values in each time interval and for every frequency  
+    will also exhibit characteristics of white noise.  
+    This implies that no distinct patterns or prominent frequency bands  
+    should be observable.  
+    Otherwise, the presence of such anomalies may indicate a fault.
+    </p>
+</div>
+
+<div class="content">
+    <h2> Selectors </h2>
+    <p>
+    A selector is defined as a statistic that enables the identification of the informative frequency band (IFB) based on the spectrogram representation of the signal.  
+    After computing the spectrogram, the values of these statistics can be evaluated for each sub-signal.  
+    For frequency bands that do not contain impulses, the selector values remain relatively constant, whereas in bands containing impulses, noticeable changes  
+    in the selector values can be observed, corresponding to the presence of an impulsive signal.
+    </p>
+    <ul>
+        <li><h4>Spectral Kurtosis</h4></li>
+        <p>
+        Spectral Kurtosis is a frequency-domain measure used to detect deviations from Gaussian behavior in a signal.
+        For a purely Gaussian (noise-like) process, the spectral kurtosis remains close to zero across all frequencies.
+        The presence of impulsive components causes significant positive deviations, allowing frequency bands containing transient events to be identified.
+        It is defined by the formula:
+        </p>
+        <p>
+            \[
+                SK(f) = \#T\frac{\sum _{t \in T} |STFT(t,f)|^4}{(\sum _{t \in T}|STFT(t,f)|^2)^2} -2,
+            \]
+        </p>
+        
+        <li><h4>Jarque-Bera statistic</h4></li>
+        <p>
+        The Jarque-Bera statistic is a classical goodness-of-fit test that jointly evaluates skewness and kurtosis
+        to assess whether a signal follows a Gaussian distribution.
+        In the context of spectrogram-based analysis, large values of the statistic indicate frequency bands
+        where the distribution of spectral amplitudes departs from normality due to impulsive behavior.
+        It is defined by the formula:
+        </p>
+        <p>
+            \[
+                JB(f) = \frac{\#T}{6}(S(f)^2 + \frac{(K(f)-1)^2}{4}),
+            \]
+        </p>
+        <p>
+        where \( S(f) \) and \( K(f) \) denote the empirical skewness and kurtosis, respectively,  
+        computed for the sub-signal corresponding to the given frequency \( f \).
+        </p>
+        <li><h4>Kolmogorov-Smirnov statistic</h4></li>
+        <p>
+        The Kolmogorov-Smirnov statistic measures the maximum discrepancy between the empirical cumulative distribution function
+        of the observed data and a reference theoretical distribution.
+        Here, it is used to quantify how strongly the distribution of spectral coefficients at a given frequency
+        differs from the assumed Gaussian model.
+        It is defined by the formula:
+        </p>
+        <p>
+            \[
+                KSS(f) = \text{sup} _x|ECDF(f,x)-\Phi(f,x)|,
+            \]
+        </p>
+        <p> where </p>
+        <p>
+            \[
+                \Phi(f,x) = \int^x_{-\infty} \frac{1}{\sqrt{2\pi \hat{\sigma(f)}}^2 } \text{exp} (-\frac{(x-\hat{\mu(f)})^{2^2}}{2\hat{\sigma(f)}}) dx,
+            \]
+        </p>
+        <p> and </p>
+        <p>
+            \[
+                ECDF(f,x) = \frac{1}{\#T} \sum_{t \in T}\mathrm{1}\{|STFT(t_k, f)| \leq x \}.
+            \]
+        </p>
+        
+        <li><h4>Cramer von Mises statistic family</h4></li>
+        <p>
+        The Cramér-von Mises family of statistics evaluates the global discrepancy between empirical and theoretical
+        distributions by integrating the squared difference over the entire range of values.
+        By introducing a weighting function, this family allows greater sensitivity to deviations occurring in specific
+        regions of the distribution, such as the tails.
+        It is defined by the formula:
+        </p>
+        <p>
+            \[
+                Q(f) = \# T \int_{-\infty}^{\infty} (ECDF(f,x) - \Phi(f,x))^2\phi(x)dx,
+            \]
+        </p>
+        <p>
+        where \( \phi(x) \) is a weighting function applied to the distances.  
+        If \( \phi(x) = 1 \), the statistic is referred to as the Cramér-von Mises (CVM) statistic,  
+        whereas if \( \phi(x) = [\Phi(f,x)(1-\Phi(f,x))]^{-1} \), the statistic is known as the Anderson-Darling (AD) statistic.
+        </p>
+        
+        <li><h4>Conditional Variance statistic</h4></li>
+        <p>
+        The Conditional Variance statistic is designed to detect changes in variability between different regions of the distribution.
+        By comparing variances computed in the central part and in the tails of the distribution,
+        this selector highlights frequency bands where impulsive components increase dispersion outside the expected Gaussian core.
+        It is defined by the formula:
+        </p>
+        <p>
+            \[
+                N:=\frac{1}{\rho}(\frac{\hat{\sigma}^2_{L_q}-\hat{\sigma}_{M_q}^2}{\hat{\sigma}^2}+\frac{\hat{\sigma}_{R_q}^2-\hat{\sigma}_{M_q}^2}{\hat{\sigma}^2})\sqrt{n},
+            \]
+        </p>
+        <p>where</p>
+        <p>
+            \[
+                L_q := ( -\infty, \Phi_{\mu,\sigma}^{-1}(q)]
+            \]
+            \[
+                R_q := [\Phi_{\mu,\sigma}^{-1}(1-q), \infty)
+            \]
+            \[
+                M_q := (\Phi_{\mu,\sigma}^{-1}(q),\Phi_{\mu,\sigma}^{-1}(1-q)),
+            \]
+        </p>
+        <p> are the lower, upper and middle q-quantiles of the dataset.</p>
+    </ul>
+
+    obrazki dla zdrowej i chorej maszyny
+</div>
+
+<div class="content">
+    <h2>Filtration and diagnosis</h2>
+    <p>
+    Based on the identified IFB, the signal was band-pass filtered by suppressing all frequency components outside the detected range.
+    Impulse occurrences in the filtered signal \( X_f[n] \) were detected using a simple statistical threshold:
+    \[
+    T = \mu_{X_f} + 3\sigma_{X_f},
+    \]
+    where \( \mu_{X_f} \) and \( \sigma_{X_f} \) denote the mean and standard deviation of the filtered signal, respectively.
+    This threshold allows for reliable detection of high-amplitude impulses while remaining insensitive to background noise.
+    Finally, the impulse strength was quantified as the ratio of the mean energy of impulse samples to the mean energy of the entire filtered signal:
+    \[
+    M = \frac{\mathbb{E}\left(X_{\text{imp}}^2\right)}{\mathbb{E}\left(X_f^2\right)}.
+    \]
+    </p>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <script src="{{ url_for('static', filename='js/info.js')}}"></script>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style_info.css') }}">
 {% endblock %}
