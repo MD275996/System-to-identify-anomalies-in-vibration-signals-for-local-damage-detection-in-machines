@@ -20,7 +20,7 @@ document.getElementById("upload-form").addEventListener("submit", async function
         const data = await response.json();
 
         if (data.success) {
-            showModal(`Załadowano plik ${data.filename}`, "/files");
+            showModal(`File loaded: ${data.filename}`, "/files");
         } else {
             showModal("File upload failed: " + (data.error || "Unknown error"));
         }
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // ustaw nazwę pliku w modal
             const modal = document.getElementById("upload-modal");
             const modalText = document.getElementById("upload-modal-text");
-            modalText.textContent = `Załadowano plik ${data.filename}`;
+            modalText.textContent = `File loaded: ${data.filename}`;
             modal.classList.remove("hidden"); // pokaż modal
 
             // obsługa przycisku "Dalej"
