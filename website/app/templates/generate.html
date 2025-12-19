@@ -5,38 +5,98 @@
 <span style="width: 100%; text-align: center;"><h2>Fill out the form</h2></span>
 <div class="form-container">
     <form id="generateForm">
-        <label>Name:</label><br>
-        <input type="text" name="field1" required value="gen_sig"><br><br>
-
         <div class="columns">
             <!-- pierwsza kolumna -->
             <div class="column">
 
-             <label>Impuls amplitude:</label><br>
-             <input type="text" name="field2" required value="10"><br><br>
-             
-             <label>Sampling frequency:</label><br>
-             <input type="text" name="field3" required value="25000"><br><br>
-             
-             <label>Signal length:</label><br>
-             <input type="text" name="field4" required value="25000"><br><br>
+                <label>Name:</label><br>
+                <input
+                    type="text"
+                    name="field1"
+                    required
+                    value="gen_sig"
+                    oninvalid="this.setCustomValidity('Signal name is required.')"
+                    oninput="this.setCustomValidity('')"
+                ><br><br>
+
+                <label>Impulse amplitude:  </label><br>
+                <input
+                    type="text"
+                    name="field2"
+                    required
+                    value="10"
+                    oninvalid="this.setCustomValidity('Impulse amplitude must be provided.')"
+                    oninput="this.setCustomValidity('')"
+                ><br><br>
+
+                <label>Sampling frequency [Hz]:</label><br>
+                <input
+                    type="text"
+                    name="field3"
+                    required
+                    value="25000"
+                    oninvalid="this.setCustomValidity('Sampling frequency is required.')"
+                    oninput="this.setCustomValidity('')"
+                ><br><br>
+
+                <label>Signal length:</label><br>
+                <input
+                    type="text"
+                    name="field4"
+                    required
+                    value="25000"
+                    oninvalid="this.setCustomValidity('Signal length must be specified.')"
+                    oninput="this.setCustomValidity('')"
+                ><br><br>
             </div>
-            
+
             <!-- druga kolumna -->
             <div class="column">
-                <label>Pulse repetition frequency:</label><br>
-                <input type="text" name="field5" required value="13"><br><br>
-                
+                <label>Pulse repetition frequency [Hz]:</label><br>
+                <input
+                    type="text"
+                    name="field5"
+                    required
+                    value="13"
+                    oninvalid="this.setCustomValidity('Pulse repetition frequency is required.')"
+                    oninput="this.setCustomValidity('')"
+                ><br><br>
+
                 <label>Band center [Hz]:</label><br>
-                <input type="text" name="field6" required value="2500"><br><br>
-                
+                <input
+                    type="text"
+                    name="field6"
+                    required
+                    value="2500"
+                    oninvalid="this.setCustomValidity('Band center frequency must be provided.')"
+                    oninput="this.setCustomValidity('')"
+                ><br><br>
+
                 <label>Band width [Hz]:</label><br>
-                <input type="text" name="field7" required value="500"><br><br>
+                <input
+                    type="text"
+                    name="field7"
+                    required
+                    value="500"
+                    oninvalid="this.setCustomValidity('Band width must be specified.')"
+                    oninput="this.setCustomValidity('')"
+                ><br><br>
+
+                <label>Sigma:</label><br>
+                <input
+                    type="text"
+                    name="field8"
+                    required
+                    value="1"
+                    oninvalid="this.setCustomValidity('Noise variance is required.')"
+                    oninput="this.setCustomValidity('')"
+                ><br><br>
             </div>
         </div>
-        
+
         <button type="submit">Generate signal</button>
     </form>
+
     <div id="generate-modal" class="modal hidden">
         <div class="modal-content">
             <h2 id="generate-modal-text">Message</h2>
