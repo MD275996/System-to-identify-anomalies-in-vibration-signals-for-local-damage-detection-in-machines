@@ -35,7 +35,7 @@ async function loadFiles() {
             grid.appendChild(fileDiv);
         });
     } catch (error) {
-        console.error("Błąd podczas ładowania plików:", error);
+        console.error("Error while loading files:", error);
     }
 }
 
@@ -276,6 +276,11 @@ document.addEventListener("DOMContentLoaded", () =>{
             document.getElementById("filter-results").classList.remove("hidden");
             document.getElementById(`filtered-signal`).src = data.plot + "?t=" + Date.now();
             document.getElementById(`result-message`).innerHTML = data.detection
+            if (data.detection == "Impulse detected"){
+                document.getElementById("result-message").style.color = "red"
+            } else if(data.detection == "No impulse detected"){
+                document.getElementById("result-message").style.color = "green"
+            }
         } else {
             alert("Filtering failed.");
         }

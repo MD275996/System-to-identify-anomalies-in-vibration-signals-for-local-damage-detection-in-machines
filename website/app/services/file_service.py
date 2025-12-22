@@ -62,9 +62,9 @@ def generate_plot(filename):
     column = df[0].to_numpy()
     plt.figure(figsize=(8,4))
     plt.plot(column, color='blue', linewidth=1)
-    plt.title("Sygnał z impulsami i szumem")
-    plt.xlabel("Próbka")
-    plt.ylabel("Amplituda")
+    plt.title("Signal")
+    plt.xlabel("Sample")
+    plt.ylabel("Amplitude")
     plt.grid(True)
     plt.tight_layout()
     
